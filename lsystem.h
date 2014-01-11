@@ -1,9 +1,11 @@
+
 #ifndef LSYSTEM_H
 #define LSYSTEM_H
 
 #include <QtGui>
 #include <string>
 
+// Possible actions in CharInterpretationMap
 typedef enum
 {
     MOVE_FORWARD,
@@ -19,11 +21,14 @@ typedef struct
     int param;
 } CharInterpretation;
 
+// CharInterpretationMap describes what action each character describes.
 typedef std::map<char, CharInterpretation> CharInterpretationMap;
 
 struct LSystem
 {
     std::string start;
+
+    // String rewriting rules.
     typedef std::map<std::string, std::string> Rules;
 
     Rules rules;
@@ -40,10 +45,17 @@ struct LSystem
 
     CharInterpretationMap interpretation;
 
+protected:
+    void parseStart(QXmlStreamReader &reader);
+    void parseRule(const QXmlStreamAttributes &attributes);
+    void parseSymbol(const QXmlStreamAttributes &attributes);
+    void parseParameter(const QXmlStreamAttributes &attributes);
+
 public:
     LSystem();
     void load(QFile *f);
-    void clear();
+    void setDefaultState();
+    void setRandomColors();
 };
 
 #endif // LSYSTEM_H

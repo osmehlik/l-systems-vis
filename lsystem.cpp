@@ -4,10 +4,10 @@
 
 LSystem::LSystem()
 {
-    clear();
+    setDefaultState();
 }
 
-void LSystem::clear()
+void LSystem::setDefaultState()
 {
     start = "";
     rules.clear();
@@ -30,15 +30,12 @@ std::string LSystem::evolve(int iterations)
 
         // for each char
         for (size_t j(0); j < str.length(); ++j) {
-
             std::string currentCharAsString = str.substr(j,1);
 
             bool foundReplacement = false;
 
             for (Rules::iterator it(rules.begin()); it != rules.end(); ++it) {
-
                 if (currentCharAsString == it->first) {
-
                     strNextIter += it->second;
                     foundReplacement = true;
                     break;
@@ -46,11 +43,8 @@ std::string LSystem::evolve(int iterations)
             }
 
             if (!foundReplacement) {
-
                 strNextIter += currentCharAsString;
             }
-
-
         }
 
         str = strNextIter;
@@ -69,111 +63,116 @@ void LSystem::load(QFile *f)
 
     QXmlStreamReader xml(f);
 
-
-    clear();
+    setDefaultState();
 
     while ((!xml.atEnd()) && (!xml.hasError())) {
         QXmlStreamReader::TokenType token = xml.readNext();
 
         if (token == QXmlStreamReader::StartElement) {
+            QXmlStreamAttributes attributes = xml.attributes();
 
             if (xml.name() == "start") {
-
-
-                std::string start = xml.readElementText().toStdString();
-
-                std::cout << "start element: " << start << "\n";
-
-                this->start = start;
+                parseStart(xml);
             }
-
-
-            if (xml.name() == "rule") {
-                QXmlStreamAttributes attributes = xml.attributes();
-
-                std::string rewriteFrom = attributes.value("from").toString().toStdString();
-                std::string rewriteTo = attributes.value("to").toString().toStdString();
-
-                std::cout << rewriteFrom << " " <<rewriteTo << "\n";
-
-                rules.insert(std::make_pair(rewriteFrom, rewriteTo));
+            else if (xml.name() == "rule") {
+                parseRule(attributes);
             }
-
-            if (xml.name() == "symbol") {
-                QXmlStreamAttributes attributes = xml.attributes();
-
-                std::string name = attributes.value("name").toString().toStdString();
-                std::string interpretationS = attributes.value("interpretation").toString().toStdString();
-                int param = attributes.value("param").toInt();
-
-
-                CharInterpretation interpretation;
-
-                if (interpretationS == "draw") {
-                    interpretation.action = DRAW_FORWARD;
-                }
-                else if (interpretationS == "move") {
-                    interpretation.action = MOVE_FORWARD;
-                }
-                else if (interpretationS == "rotate") {
-                    interpretation.action = ROTATE;
-                    interpretation.param = param;
-                }
-                else if (interpretationS == "push") {
-                    interpretation.action = PUSH_MATRIX;
-                }
-                else if (interpretationS == "pop") {
-                    interpretation.action = POP_MATRIX;
-                }
-                else continue;
-
-                this->interpretation.insert(
-                            std::make_pair(
-                                name[0],
-                            interpretation
-
-                            )
-                        );
-
-
-
+            else if (xml.name() == "symbol") {
+                parseSymbol(attributes);
             }
-
-
-            if (xml.name() == "param") {
-                QXmlStreamAttributes attributes = xml.attributes();
-
-                std::string name = attributes.value("name").toString().toStdString();
-                QStringRef value(attributes.value("value"));
-
-                if (name == "iterations") {
-                    iterations = value.toInt();
-                }
-                else if (name == "background-color") {
-                    backgroundColor = value.toString();
-                }
-                else if (name == "foreground-color") {
-                    foregroundColor = value.toString();
-                }
-                else if (name == "start-x") {
-                    startX = value.toDouble();
-                }
-                else if (name == "start-y") {
-                    startY = value.toDouble();
-                }
-                else if (name == "start-rot") {
-                    startRot = value.toInt();
-                }
-                else if (name == "iterations") {
-                    iterations = value.toInt();
-                }
-                else if (name == "step-length") {
-                    stepLength = value.toInt();
-                }
+            else if (xml.name() == "param") {
+                parseParameter(attributes);
             }
-
         }
-
     }
+
     xml.clear();
+}
+
+void LSystem::parseStart(QXmlStreamReader &reader)
+{
+    std::string start = reader.readElementText().toStdString();
+
+    this->start = start;
+}
+
+void LSystem::parseRule(const QXmlStreamAttributes &attributes)
+{
+    std::string rewriteFrom(attributes.value("from").toString().toStdString());
+    std::string rewriteTo(attributes.value("to").toString().toStdString());
+
+    rules.insert(std::make_pair(rewriteFrom, rewriteTo));
+}
+
+void LSystem::parseSymbol(const QXmlStreamAttributes &attributes)
+{
+    std::string name = attributes.value("name").toString().toStdString();
+    std::string interpretationS = attributes.value("interpretation").toString().toStdString();
+    int param = attributes.value("param").toInt();
+
+    CharInterpretation interpretation;
+
+    if (interpretationS == "draw") {
+        interpretation.action = DRAW_FORWARD;
+    }
+    else if (interpretationS == "move") {
+        interpretation.action = MOVE_FORWARD;
+    }
+    else if (interpretationS == "rotate") {
+        interpretation.action = ROTATE;
+        interpretation.param = param;
+    }
+    else if (interpretationS == "push") {
+        interpretation.action = PUSH_MATRIX;
+    }
+    else if (interpretationS == "pop") {
+        interpretation.action = POP_MATRIX;
+    }
+    else return;
+
+    this->interpretation.insert(std::make_pair(name[0],interpretation));
+}
+
+void LSystem::parseParameter(const QXmlStreamAttributes &attributes)
+{
+    std::string name = attributes.value("name").toString().toStdString();
+    QStringRef value(attributes.value("value"));
+
+    if (name == "iterations") {
+        iterations = value.toInt();
+    }
+    else if (name == "background-color") {
+        backgroundColor = value.toString();
+    }
+    else if (name == "foreground-color") {
+        foregroundColor = value.toString();
+    }
+    else if (name == "start-x") {
+        startX = value.toDouble();
+    }
+    else if (name == "start-y") {
+        startY = value.toDouble();
+    }
+    else if (name == "start-rot") {
+        startRot = value.toInt();
+    }
+    else if (name == "iterations") {
+        iterations = value.toInt();
+    }
+    else if (name == "step-length") {
+        stepLength = value.toInt();
+    }
+}
+
+void LSystem::setRandomColors()
+{
+    srand(time(NULL));
+
+    backgroundColor.setRed(random() % 256);
+    backgroundColor.setGreen(random() % 256);
+    backgroundColor.setBlue(random() % 256);
+
+    foregroundColor.setRed(random() % 256);
+    foregroundColor.setGreen(random() % 256);
+    foregroundColor.setBlue(random() % 256);
 }

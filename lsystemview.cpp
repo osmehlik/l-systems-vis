@@ -15,8 +15,6 @@ void LSystemView::paintEvent(QPaintEvent *e)
 {
     QPainter qp(this);
     drawWidget(qp);
-
-    //QFrame::paintEvent(e);
 }
 
 void LSystemView::drawWidget(QPainter &painter)
@@ -31,10 +29,8 @@ void LSystemView::drawWidget(QPainter &painter)
     int posX = static_cast<int>(lsystem.startX * w);
     int posY = static_cast<int>(lsystem.startY * h);
 
-
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setRenderHint(QPainter::HighQualityAntialiasing);
-
 
     painter.setPen(lsystem.foregroundColor);
 
@@ -49,14 +45,10 @@ void LSystemView::drawWidget(QPainter &painter)
 
         char processedCharacter = lsystemstr[i];
 
-
         // skip unknown symbols, they mean do nothing
         if (!lsystem.interpretation.count(processedCharacter)) continue;
 
         CharInterpretation interpretation = lsystem.interpretation[processedCharacter];
-
-
-
 
         switch (interpretation.action) {
             case MOVE_FORWARD:
@@ -80,53 +72,46 @@ void LSystemView::drawWidget(QPainter &painter)
     }
 }
 
-void LSystemView::valueStartXChanged(double newValue) {
+void LSystemView::valueStartXChanged(double newValue)
+{
     lsystem.startX = newValue;
     update();
 }
 
-void LSystemView::valueStartYChanged(double newValue) {
+void LSystemView::valueStartYChanged(double newValue)
+{
     lsystem.startY = newValue;
     update();
 }
 
-void LSystemView::valueStartRotChanged(int newValue) {
+void LSystemView::valueStartRotChanged(int newValue)
+{
     lsystem.startRot = newValue;
     update();
 }
 
-void LSystemView::valueIterationsChanged(int newValue) {
+void LSystemView::valueIterationsChanged(int newValue)
+{
     lsystem.iterations = newValue;
     update();
 }
 
-void LSystemView::valueStepLengthChanged(int newValue) {
+void LSystemView::valueStepLengthChanged(int newValue)
+{
     lsystem.stepLength = newValue;
     update();
 }
 
-
 void LSystemView::setRandomColors()
 {
-    srand(time(NULL));
-
-    lsystem.backgroundColor.setRed(random()%256);
-    lsystem.backgroundColor.setGreen(random()%256);
-    lsystem.backgroundColor.setBlue(random()%256);
-
-    lsystem.foregroundColor.setRed(random()%256);
-    lsystem.foregroundColor.setGreen(random()%256);
-    lsystem.foregroundColor.setBlue(random()%256);
-
+    lsystem.setRandomColors();
     update();
 }
 
 void LSystemView::setBackgroundColor()
 {
     QColor backgroundColor = QColorDialog::getColor(
-                lsystem.backgroundColor, this,
-                QString::fromUtf8("Set Color:")
-                );
+        lsystem.backgroundColor, this, QString::fromUtf8("Set Color:"));
 
     if (backgroundColor.isValid()) {
         lsystem.backgroundColor = backgroundColor;
@@ -137,8 +122,7 @@ void LSystemView::setBackgroundColor()
 void LSystemView::setForegroundColor()
 {
     QColor foregroundColor = QColorDialog::getColor(
-                lsystem.foregroundColor, this,
-                QString::fromUtf8("Set Color:"));
+        lsystem.foregroundColor, this, QString::fromUtf8("Set Color:"));
 
     if (foregroundColor.isValid()) {
         lsystem.foregroundColor = foregroundColor;

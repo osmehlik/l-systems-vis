@@ -1,3 +1,4 @@
+
 #ifndef LSYSTEMVIEW_H
 #define LSYSTEMVIEW_H
 
@@ -7,12 +8,10 @@
 class LSystemView : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit LSystemView(QWidget *parent = 0);
-
-   LSystem lsystem;
-
-
+    LSystem lsystem;
 
 public slots:
     void valueStartXChanged(double newValue);
@@ -27,7 +26,6 @@ public slots:
 protected:
     void paintEvent(QPaintEvent *e);
     void drawWidget(QPainter &qp);
-
 };
 
 #endif // LSYSTEMVIEW_H
