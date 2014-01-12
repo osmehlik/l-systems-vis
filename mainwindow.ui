@@ -211,11 +211,32 @@
     </property>
     <addaction name="actionOpen"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionShowHideBrowser"/>
+    <addaction name="actionShowHideProperties"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuView"/>
   </widget>
   <action name="actionOpen">
    <property name="text">
     <string>Open</string>
+   </property>
+  </action>
+  <action name="actionShowHideBrowser">
+   <property name="text">
+    <string>Show/Hide Browser</string>
+   </property>
+  </action>
+  <action name="actionShowHideProperties">
+   <property name="text">
+    <string>Show/Hide Properties</string>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
    </property>
   </action>
  </widget>

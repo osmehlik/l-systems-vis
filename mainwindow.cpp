@@ -32,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent) :
             ui->lSystemView, SLOT(setForegroundColor()));
 
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenClicked()));
+    connect(ui->actionShowHideBrowser, SIGNAL(triggered()), this, SLOT(onShowHideBrowserClicked()));
+    connect(ui->actionShowHideProperties, SIGNAL(triggered()), this, SLOT(onShowHidePropertiesClicked()));
 
     connect(ui->randomizeButton, SIGNAL(clicked()), ui->lSystemView, SLOT(setRandomColors()));
 
@@ -68,6 +70,16 @@ void MainWindow::onOpenClicked()
     QFile *f = new QFile(s);
 
     openFile(f);
+}
+
+void MainWindow::onShowHideBrowserClicked()
+{
+    ui->treeView->setVisible(!ui->treeView->isVisible());
+}
+
+void MainWindow::onShowHidePropertiesClicked()
+{
+    ui->parameters->setVisible(!ui->parameters->isVisible());
 }
 
 void MainWindow::openFile(QFile *f)

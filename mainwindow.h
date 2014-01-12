@@ -20,6 +20,9 @@ public:
 
 public slots:
     void onOpenClicked();
+    void onShowHideBrowserClicked();
+    void onShowHidePropertiesClicked();
+
     void onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
 private:
