@@ -22,6 +22,7 @@ public slots:
     void onOpenClicked();
     void onShowHideBrowserClicked();
     void onShowHidePropertiesClicked();
+    void onRandomizeColorsClicked();
 
     void onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 

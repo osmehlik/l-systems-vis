@@ -26,16 +26,16 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->stepSpinBox, SIGNAL(valueChanged(int)),
             ui->lSystemView, SLOT(valueStepLengthChanged(int)));
 
-    connect(ui->selectBackgroundButton, SIGNAL(clicked()),
-            ui->lSystemView, SLOT(setBackgroundColor()));
-    connect(ui->selectForegroundButton, SIGNAL(clicked()),
-            ui->lSystemView, SLOT(setForegroundColor()));
+    connect(ui->backgroundWidget, SIGNAL(colorChanged(QColor)),
+            ui->lSystemView, SLOT(setBackgroundColor(QColor)));
+    connect(ui->foregroundWidget, SIGNAL(colorChanged(QColor)),
+            ui->lSystemView, SLOT(setForegroundColor(QColor)));
 
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenClicked()));
     connect(ui->actionShowHideBrowser, SIGNAL(triggered()), this, SLOT(onShowHideBrowserClicked()));
     connect(ui->actionShowHideProperties, SIGNAL(triggered()), this, SLOT(onShowHidePropertiesClicked()));
 
-    connect(ui->randomizeButton, SIGNAL(clicked()), ui->lSystemView, SLOT(setRandomColors()));
+    connect(ui->randomizeButton, SIGNAL(clicked()), this, SLOT(onRandomizeColorsClicked()));
 
     updateControls();
 
@@ -82,17 +82,23 @@ void MainWindow::onShowHidePropertiesClicked()
     ui->parameters->setVisible(!ui->parameters->isVisible());
 }
 
+void MainWindow::onRandomizeColorsClicked()
+{
+    ui->lSystemView->lsystem.setRandomColors();
+    updateControls();
+    update();
+}
+
 void MainWindow::openFile(QFile *f)
 {
     ui->lSystemView->lsystem.load(f);
     updateControls();
-    ui->centralWidget->update();
+    update();
 }
 
 void MainWindow::onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     QString path = fileSystemModel->filePath(ui->treeView->selectionModel()->currentIndex());
-    //ui->lineEdit->setText(path);
 
     QFile *f = new QFile(path);
 
@@ -107,4 +113,6 @@ void MainWindow::updateControls()
     ui->startRotationSpinBox->setValue(ui->lSystemView->lsystem.startRot);
     ui->iterationsSpinBox->setValue(ui->lSystemView->lsystem.iterations);
     ui->stepSpinBox->setValue(ui->lSystemView->lsystem.stepLength);
+    ui->backgroundWidget->setValue(ui->lSystemView->lsystem.backgroundColor);
+    ui->foregroundWidget->setValue(ui->lSystemView->lsystem.foregroundColor);
 }

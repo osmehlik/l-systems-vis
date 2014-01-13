@@ -102,30 +102,18 @@ void LSystemView::valueStepLengthChanged(int newValue)
     update();
 }
 
-void LSystemView::setRandomColors()
+void LSystemView::setBackgroundColor(QColor color)
 {
-    lsystem.setRandomColors();
-    update();
-}
-
-void LSystemView::setBackgroundColor()
-{
-    QColor backgroundColor = QColorDialog::getColor(
-        lsystem.backgroundColor, this, QString::fromUtf8("Set Color:"));
-
-    if (backgroundColor.isValid()) {
-        lsystem.backgroundColor = backgroundColor;
+    if (color.isValid()) {
+        lsystem.backgroundColor = color;
     }
     update();
 }
 
-void LSystemView::setForegroundColor()
+void LSystemView::setForegroundColor(QColor color)
 {
-    QColor foregroundColor = QColorDialog::getColor(
-        lsystem.foregroundColor, this, QString::fromUtf8("Set Color:"));
-
-    if (foregroundColor.isValid()) {
-        lsystem.foregroundColor = foregroundColor;
+    if (color.isValid()) {
+        lsystem.foregroundColor = color;
     }
     update();
 }

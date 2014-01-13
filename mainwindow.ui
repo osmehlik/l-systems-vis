@@ -39,7 +39,7 @@
     <item>
      <widget class="QTreeView" name="treeView">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -52,7 +52,7 @@
       </property>
       <property name="baseSize">
        <size>
-        <width>128</width>
+        <width>256</width>
         <height>0</height>
        </size>
       </property>
@@ -71,7 +71,7 @@
     <item>
      <widget class="QFrame" name="parameters">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -168,21 +168,27 @@
          <item row="4" column="1">
           <widget class="QSpinBox" name="stepSpinBox"/>
          </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="backgroundLabel">
+           <property name="text">
+            <string>Background</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="ColorWidget" name="backgroundWidget" native="true"/>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="foregroundLabel">
+           <property name="text">
+            <string>Foreground</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="ColorWidget" name="foregroundWidget" native="true"/>
+         </item>
         </layout>
-       </item>
-       <item>
-        <widget class="QPushButton" name="selectBackgroundButton">
-         <property name="text">
-          <string>Select Background Color</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="selectForegroundButton">
-         <property name="text">
-          <string>Select Foreground Color</string>
-         </property>
-        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="randomizeButton">
@@ -246,6 +252,12 @@
    <class>LSystemView</class>
    <extends>QWidget</extends>
    <header>lsystemview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ColorWidget</class>
+   <extends>QWidget</extends>
+   <header>colorwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

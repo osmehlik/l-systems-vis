@@ -19,9 +19,8 @@ public slots:
     void valueStartRotChanged(int newValue);
     void valueIterationsChanged(int newValue);
     void valueStepLengthChanged(int newValue);
-    void setRandomColors();
-    void setBackgroundColor();
-    void setForegroundColor();
+    void setBackgroundColor(QColor color);
+    void setForegroundColor(QColor color);
 
 protected:
     void paintEvent(QPaintEvent *e);

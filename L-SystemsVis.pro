@@ -15,10 +15,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     lsystemview.cpp \
-    lsystem.cpp
+    lsystem.cpp \
+    colorwidget.cpp
 
 HEADERS  += mainwindow.h \
     lsystemview.h \
-    lsystem.h
+    lsystem.h \
+    colorwidget.h
 
 FORMS    += mainwindow.ui
