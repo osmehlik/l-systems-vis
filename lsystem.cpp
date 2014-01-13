@@ -141,10 +141,10 @@ void LSystem::parseParameter(const QXmlStreamAttributes &attributes)
     if (name == "iterations") {
         iterations = value.toInt();
     }
-    else if (name == "background-color") {
+    else if (name == "color-bg") {
         backgroundColor = value.toString();
     }
-    else if (name == "foreground-color") {
+    else if (name == "color-fg") {
         foregroundColor = value.toString();
     }
     else if (name == "start-x") {

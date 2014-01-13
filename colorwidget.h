@@ -8,8 +8,11 @@ class ColorWidget : public QWidget
     Q_OBJECT
 
     QColor managedColor;
+    QAction *copyAction;
+
 public:
     explicit ColorWidget(QWidget *parent = 0);
+    ~ColorWidget();
     void setValue(QColor color);
 protected:
     void paintEvent(QPaintEvent *e);
@@ -17,7 +20,8 @@ protected:
 signals:
     void colorChanged(QColor color);
 public slots:
-
+    void showContextMenu(const QPoint &point);
+    void copyColorToClipboard();
 };
 
 #endif // COLORWIDGET_H

@@ -1,6 +1,9 @@
 #include "colorwidget.h"
 #include <QPainter>
 #include <QColorDialog>
+#include <QMenu>
+#include <QClipboard>
+#include <QApplication>
 
 ColorWidget::ColorWidget(QWidget *parent) :
     QWidget(parent)
@@ -8,6 +11,18 @@ ColorWidget::ColorWidget(QWidget *parent) :
     managedColor = Qt::white;
     setMinimumWidth(32);
     setMinimumHeight(16);
+
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(showContextMenu(QPoint)));
+
+    copyAction = new QAction("Copy", this);
+    connect(copyAction, SIGNAL(triggered()), this, SLOT(copyColorToClipboard()));
+}
+
+ColorWidget::~ColorWidget()
+{
+    delete copyAction;
 }
 
 void ColorWidget::paintEvent(QPaintEvent *e)
@@ -38,4 +53,21 @@ void ColorWidget::mouseReleaseEvent(QMouseEvent * event)
 void ColorWidget::setValue(QColor color)
 {
     managedColor = color;
+}
+
+void ColorWidget::showContextMenu(const QPoint &point)
+{
+    QPoint globalCoordsPoint = mapToGlobal(point);
+
+    QMenu menu;
+
+    menu.addAction(copyAction);
+    menu.exec(globalCoordsPoint);
+}
+
+void ColorWidget::copyColorToClipboard()
+{
+    QClipboard *clipboard = QApplication::clipboard();
+
+    clipboard->setText(managedColor.name());
 }
