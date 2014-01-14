@@ -52,6 +52,10 @@ MainWindow::MainWindow(QWidget *parent) :
     fileSystemModel->setNameFilters(nameFilters);
 
     ui->treeView->setModel(fileSystemModel);
+    ui->treeView->hideColumn(3);
+    ui->treeView->hideColumn(2);
+    ui->treeView->hideColumn(1);
+    ui->treeView->setHeaderHidden(true);
 
 
     connect(ui->treeView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
