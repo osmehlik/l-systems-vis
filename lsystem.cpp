@@ -1,6 +1,8 @@
 
 #include "lsystem.h"
 #include <iostream>
+#include <sstream>
+#include <QMessageBox>
 
 LSystem::LSystem()
 {
@@ -53,6 +55,144 @@ std::string LSystem::evolve(int iterations)
     return str;
 }
 
+void LSystem::save(QFile *f)
+{
+    if (!f->open(QIODevice::WriteOnly))
+    {
+        QMessageBox::warning(0, "Read only", "File rights disallow writting to file.");
+        return;
+    }
+
+    QXmlStreamWriter writer;
+
+    writer.setDevice(f);
+    writer.setAutoFormatting(true);
+
+    writer.writeStartDocument();
+    writer.writeStartElement("lsystem");
+
+    writeStart(writer);
+    writeRules(writer);
+    writeSymbols(writer);
+    writeParams(writer);
+
+    writer.writeEndElement(); // lsystem
+    writer.writeEndDocument();
+}
+
+void LSystem::writeStart(QXmlStreamWriter &writer)
+{
+    writer.writeStartElement("start");
+    writer.writeCharacters(start.c_str());
+    writer.writeEndElement(); // start
+}
+
+void LSystem::writeRules(QXmlStreamWriter &writer)
+{
+    typedef Rules::iterator RulesIt;
+
+    writer.writeStartElement("rules");
+    for (RulesIt it(rules.begin()); it != rules.end(); ++it) {
+        writer.writeStartElement("rule");
+        writer.writeAttribute("from", it->first.c_str());
+        writer.writeAttribute("to", it->second.c_str());
+        writer.writeEndElement(); // rule
+    }
+    writer.writeEndElement(); // rules
+}
+
+
+void LSystem::writeSymbols(QXmlStreamWriter &writer)
+{
+    typedef CharInterpretationMap::iterator CharInterpretationMapIt;
+
+    writer.writeStartElement("symbols");
+    for (CharInterpretationMapIt it(interpretation.begin()); it != interpretation.end(); ++it) {
+        writer.writeStartElement("symbol");
+
+        std::stringstream ss;
+
+        ss << it->first;
+
+        writer.writeAttribute("name", ss.str().c_str());
+
+        switch (it->second.action) {
+            case DRAW_FORWARD:
+                writer.writeAttribute("interpretation", "draw");
+                break;
+            case ROTATE:
+                {
+                    writer.writeAttribute("interpretation", "rotate");
+
+                    std::stringstream ss;
+
+                    ss << it->second.param;
+
+                    writer.writeAttribute("param", ss.str().c_str());
+                }
+                break;
+            case PUSH_MATRIX:
+                writer.writeAttribute("interpretation", "push");
+                break;
+            case POP_MATRIX:
+                writer.writeAttribute("interpretation", "pop");
+                break;
+            default:
+                break;
+        }
+
+        writer.writeEndElement(); // symbol
+    }
+    writer.writeEndElement(); // symbols
+}
+
+void LSystem::writeParam(QXmlStreamWriter &writer, QString name, QString value)
+{
+    writer.writeStartElement("param");
+    writer.writeAttribute("name", name);
+    writer.writeAttribute("value", value);
+    writer.writeEndElement(); // param
+}
+
+void LSystem::writeParams(QXmlStreamWriter &writer)
+{
+    writer.writeStartElement("params");
+
+    // color-bg
+    writeParam(writer, "color-bg", backgroundColor.name());
+
+    // color-fg
+    writeParam(writer, "color-fg", foregroundColor.name());
+
+    std::stringstream ss;
+
+    // start-x
+    ss.str(std::string()); ss.clear();
+    ss << startX;
+    writeParam(writer, "start-x", ss.str().c_str());
+
+    // start-y
+    ss.str(std::string()); ss.clear();
+    ss << startY;
+    writeParam(writer, "start-y", ss.str().c_str());
+
+    // start-rot
+    ss.str(std::string()); ss.clear();
+    ss << startRot;
+    writeParam(writer, "start-rot", ss.str().c_str());
+
+    // iterations
+    ss.str(std::string()); ss.clear();
+    ss << iterations;
+    writeParam(writer, "iterations", ss.str().c_str());
+
+    // step-length
+    ss.str(std::string()); ss.clear();
+    ss << stepLength;
+    writeParam(writer, "step-length", ss.str().c_str());
+
+    writer.writeEndElement(); // params
+}
 
 void LSystem::load(QFile *f)
 {

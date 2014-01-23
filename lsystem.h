@@ -46,6 +46,12 @@ struct LSystem
     CharInterpretationMap interpretation;
 
 protected:
+    void writeStart(QXmlStreamWriter &writer);
+    void writeRules(QXmlStreamWriter &writer);
+    void writeSymbols(QXmlStreamWriter &writer);
+    void writeParams(QXmlStreamWriter &writer);
+    void writeParam(QXmlStreamWriter &writer, QString name, QString value);
+
     void parseStart(QXmlStreamReader &reader);
     void parseRule(const QXmlStreamAttributes &attributes);
     void parseSymbol(const QXmlStreamAttributes &attributes);
@@ -54,6 +60,7 @@ protected:
 public:
     LSystem();
     void load(QFile *f);
+    void save(QFile *f);
     void setDefaultState();
     void setRandomColors();
 };

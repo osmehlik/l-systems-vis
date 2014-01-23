@@ -20,6 +20,7 @@ public:
 
 public slots:
     void onOpenClicked();
+    void onSaveAsClicked();
     void onShowHideBrowserClicked();
     void onShowHidePropertiesClicked();
     void onRandomizeColorsClicked();

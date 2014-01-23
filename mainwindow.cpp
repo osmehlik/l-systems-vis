@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
             ui->lSystemView, SLOT(setForegroundColor(QColor)));
 
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenClicked()));
+    connect(ui->actionSaveAs, SIGNAL(triggered()), this, SLOT(onSaveAsClicked()));
     connect(ui->actionShowHideBrowser, SIGNAL(triggered()), this, SLOT(onShowHideBrowserClicked()));
     connect(ui->actionShowHideProperties, SIGNAL(triggered()), this, SLOT(onShowHidePropertiesClicked()));
 
@@ -74,6 +75,17 @@ void MainWindow::onOpenClicked()
     QFile *f = new QFile(s);
 
     openFile(f);
+}
+
+void MainWindow::onSaveAsClicked()
+{
+    QString s = QFileDialog::getSaveFileName(this,tr("Save L-System File"), "", tr("L-System Files (*.lsys"));
+
+    QFile *f = new QFile(s);
+
+    ui->lSystemView->lsystem.save(f);
+
+    delete f;
 }
 
 void MainWindow::onShowHideBrowserClicked()
