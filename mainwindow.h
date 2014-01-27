@@ -23,9 +23,13 @@ public slots:
     void onSaveAsClicked();
     void onShowHideBrowserClicked();
     void onShowHidePropertiesClicked();
+    void onShowHideRulesClicked();
     void onRandomizeColorsClicked();
 
     void onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+
+private slots:
+    void on_addRuleButton_clicked();
 
 private:
 

@@ -4,6 +4,7 @@
 
 #include <QtGui>
 #include <string>
+#include <vector>
 
 // Possible actions in CharInterpretationMap
 typedef enum
@@ -24,12 +25,12 @@ typedef struct
 // CharInterpretationMap describes what action each character describes.
 typedef std::map<char, CharInterpretation> CharInterpretationMap;
 
+// String rewriting rules.
+typedef std::vector<std::pair<std::string, std::string> > Rules;
+
 struct LSystem
 {
     std::string start;
-
-    // String rewriting rules.
-    typedef std::map<std::string, std::string> Rules;
 
     Rules rules;
 

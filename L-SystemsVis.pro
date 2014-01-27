@@ -16,11 +16,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     lsystemview.cpp \
     lsystem.cpp \
-    colorwidget.cpp
+    colorwidget.cpp \
+    ruleseditorwidget.cpp \
+    ruleeditorwidget.cpp
 
 HEADERS  += mainwindow.h \
     lsystemview.h \
     lsystem.h \
-    colorwidget.h
+    colorwidget.h \
+    ruleseditorwidget.h \
+    ruleeditorwidget.h
 
 FORMS    += mainwindow.ui

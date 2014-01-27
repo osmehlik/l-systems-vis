@@ -16,25 +16,26 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->startXDoubleSpinBox, SIGNAL(valueChanged(double)),
-            ui->lSystemView, SLOT(valueStartXChanged(double)));
+            ui->centralWidget, SLOT(valueStartXChanged(double)));
     connect(ui->startYDoubleSpinBox, SIGNAL(valueChanged(double)),
-            ui->lSystemView, SLOT(valueStartYChanged(double)));
+            ui->centralWidget, SLOT(valueStartYChanged(double)));
     connect(ui->startRotationSpinBox, SIGNAL(valueChanged(int)),
-            ui->lSystemView, SLOT(valueStartRotChanged(int)));
+            ui->centralWidget, SLOT(valueStartRotChanged(int)));
     connect(ui->iterationsSpinBox, SIGNAL(valueChanged(int)),
-            ui->lSystemView, SLOT(valueIterationsChanged(int)));
+            ui->centralWidget, SLOT(valueIterationsChanged(int)));
     connect(ui->stepSpinBox, SIGNAL(valueChanged(int)),
-            ui->lSystemView, SLOT(valueStepLengthChanged(int)));
+            ui->centralWidget, SLOT(valueStepLengthChanged(int)));
 
     connect(ui->backgroundWidget, SIGNAL(colorChanged(QColor)),
-            ui->lSystemView, SLOT(setBackgroundColor(QColor)));
+            ui->centralWidget, SLOT(setBackgroundColor(QColor)));
     connect(ui->foregroundWidget, SIGNAL(colorChanged(QColor)),
-            ui->lSystemView, SLOT(setForegroundColor(QColor)));
+            ui->centralWidget, SLOT(setForegroundColor(QColor)));
 
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenClicked()));
     connect(ui->actionSaveAs, SIGNAL(triggered()), this, SLOT(onSaveAsClicked()));
     connect(ui->actionShowHideBrowser, SIGNAL(triggered()), this, SLOT(onShowHideBrowserClicked()));
     connect(ui->actionShowHideProperties, SIGNAL(triggered()), this, SLOT(onShowHidePropertiesClicked()));
+    connect(ui->actionShowHideRules, SIGNAL(triggered()), this, SLOT(onShowHideRulesClicked()));
 
     connect(ui->randomizeButton, SIGNAL(clicked()), this, SLOT(onRandomizeColorsClicked()));
 
@@ -83,31 +84,37 @@ void MainWindow::onSaveAsClicked()
 
     QFile *f = new QFile(s);
 
-    ui->lSystemView->lsystem.save(f);
+    ui->centralWidget->lsystem.save(f);
 
     delete f;
 }
 
 void MainWindow::onShowHideBrowserClicked()
 {
-    ui->treeView->setVisible(!ui->treeView->isVisible());
+    ui->directoryBrowserDockWidget->setVisible(!ui->directoryBrowserDockWidget->isVisible());
 }
 
 void MainWindow::onShowHidePropertiesClicked()
 {
-    ui->parameters->setVisible(!ui->parameters->isVisible());
+    ui->parametersDockWidget->setVisible(!ui->parametersDockWidget->isVisible());
+}
+
+void MainWindow::onShowHideRulesClicked()
+{
+    ui->rulesEditorDockWidget->setVisible(!ui->rulesEditorDockWidget->isVisible());
 }
 
 void MainWindow::onRandomizeColorsClicked()
 {
-    ui->lSystemView->lsystem.setRandomColors();
+    ui->centralWidget->lsystem.setRandomColors();
     updateControls();
     update();
 }
 
 void MainWindow::openFile(QFile *f)
 {
-    ui->lSystemView->lsystem.load(f);
+    ui->centralWidget->lsystem.load(f);
+    ui->rulesEditorWidget->loadRules(&(ui->centralWidget->lsystem));
     updateControls();
     update();
 }
@@ -124,11 +131,16 @@ void MainWindow::onSelectionChanged(const QItemSelection &selected, const QItemS
 
 void MainWindow::updateControls()
 {
-    ui->startXDoubleSpinBox->setValue(ui->lSystemView->lsystem.startX);
-    ui->startYDoubleSpinBox->setValue(ui->lSystemView->lsystem.startY);
-    ui->startRotationSpinBox->setValue(ui->lSystemView->lsystem.startRot);
-    ui->iterationsSpinBox->setValue(ui->lSystemView->lsystem.iterations);
-    ui->stepSpinBox->setValue(ui->lSystemView->lsystem.stepLength);
-    ui->backgroundWidget->setValue(ui->lSystemView->lsystem.backgroundColor);
-    ui->foregroundWidget->setValue(ui->lSystemView->lsystem.foregroundColor);
+    ui->startXDoubleSpinBox->setValue(ui->centralWidget->lsystem.startX);
+    ui->startYDoubleSpinBox->setValue(ui->centralWidget->lsystem.startY);
+    ui->startRotationSpinBox->setValue(ui->centralWidget->lsystem.startRot);
+    ui->iterationsSpinBox->setValue(ui->centralWidget->lsystem.iterations);
+    ui->stepSpinBox->setValue(ui->centralWidget->lsystem.stepLength);
+    ui->backgroundWidget->setValue(ui->centralWidget->lsystem.backgroundColor);
+    ui->foregroundWidget->setValue(ui->centralWidget->lsystem.foregroundColor);
+}
+
+void MainWindow::on_addRuleButton_clicked()
+{
+   ui->rulesEditorWidget->addRule();
 }

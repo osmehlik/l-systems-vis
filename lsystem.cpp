@@ -241,7 +241,7 @@ void LSystem::parseRule(const QXmlStreamAttributes &attributes)
     std::string rewriteFrom(attributes.value("from").toString().toStdString());
     std::string rewriteTo(attributes.value("to").toString().toStdString());
 
-    rules.insert(std::make_pair(rewriteFrom, rewriteTo));
+    rules.push_back(std::make_pair(rewriteFrom, rewriteTo));
 }
 
 void LSystem::parseSymbol(const QXmlStreamAttributes &attributes)
