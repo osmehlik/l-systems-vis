@@ -15,22 +15,35 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->startXDoubleSpinBox, SIGNAL(valueChanged(double)),
-            ui->centralWidget, SLOT(valueStartXChanged(double)));
-    connect(ui->startYDoubleSpinBox, SIGNAL(valueChanged(double)),
-            ui->centralWidget, SLOT(valueStartYChanged(double)));
-    connect(ui->startRotationSpinBox, SIGNAL(valueChanged(int)),
-            ui->centralWidget, SLOT(valueStartRotChanged(int)));
-    connect(ui->iterationsSpinBox, SIGNAL(valueChanged(int)),
-            ui->centralWidget, SLOT(valueIterationsChanged(int)));
-    connect(ui->stepSpinBox, SIGNAL(valueChanged(int)),
-            ui->centralWidget, SLOT(valueStepLengthChanged(int)));
+    lSystem = new LSystem();
+    ui->centralWidget->setLSystem(lSystem);
 
-    connect(ui->backgroundWidget, SIGNAL(colorChanged(QColor)),
-            ui->centralWidget, SLOT(setBackgroundColor(QColor)));
-    connect(ui->foregroundWidget, SIGNAL(colorChanged(QColor)),
-            ui->centralWidget, SLOT(setForegroundColor(QColor)));
+    // Update lsystem when controls changes
 
+
+    connect(ui->startXDoubleSpinBox, SIGNAL(valueChanged(double)), lSystem, SLOT(setStartX(double)));
+    connect(ui->startYDoubleSpinBox, SIGNAL(valueChanged(double)), lSystem, SLOT(setStartY(double)));
+    connect(ui->startRotationSpinBox, SIGNAL(valueChanged(int)), lSystem, SLOT(setStartRot(int)));
+    connect(ui->iterationsSpinBox, SIGNAL(valueChanged(int)), lSystem, SLOT(setIterations(int)));
+    connect(ui->stepSpinBox, SIGNAL(valueChanged(int)), lSystem, SLOT(setStepLength(int)));
+    connect(ui->backgroundWidget, SIGNAL(colorChanged(QColor)), lSystem, SLOT(setBackgroundColor(QColor)));
+    connect(ui->foregroundWidget, SIGNAL(colorChanged(QColor)), lSystem, SLOT(setForegroundColor(QColor)));
+
+
+    // Update controls when lsystem changes
+
+    connect(lSystem, SIGNAL(startXWasChanged(double)), ui->startXDoubleSpinBox, SLOT(setValue(double)));
+    connect(lSystem, SIGNAL(startYWasChanged(double)), ui->startYDoubleSpinBox, SLOT(setValue(double)));
+    connect(lSystem, SIGNAL(startRotWasChanged(int)), ui->startRotationSpinBox, SLOT(setValue(int)));
+    connect(lSystem, SIGNAL(iterationsWasChanged(int)), ui->iterationsSpinBox, SLOT(setValue(int)));
+    connect(lSystem, SIGNAL(stepLengthWasChanged(int)), ui->stepSpinBox, SLOT(setValue(int)));
+    connect(lSystem, SIGNAL(backgroundColorWasChanged(QColor)), ui->backgroundWidget, SLOT(setValue(QColor)));
+    connect(lSystem, SIGNAL(foregroundColorWasChanged(QColor)), ui->foregroundWidget, SLOT(setValue(QColor)));
+
+    // Redraw lSystemView on lSystem change.
+    connect(lSystem, SIGNAL(lSystemWasChanged()), ui->centralWidget, SLOT(update()));
+
+    // Connect actions to menu items.
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenClicked()));
     connect(ui->actionSaveAs, SIGNAL(triggered()), this, SLOT(onSaveAsClicked()));
     connect(ui->actionShowHideBrowser, SIGNAL(triggered()), this, SLOT(onShowHideBrowserClicked()));
@@ -39,7 +52,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->randomizeButton, SIGNAL(clicked()), this, SLOT(onRandomizeColorsClicked()));
 
-    updateControls();
+    // Connect rules editing signals to slots.
+    connect(ui->rulesEditorWidget, SIGNAL(ruleWasAdded()), lSystem, SLOT(addRule()));
+    connect(ui->rulesEditorWidget, SIGNAL(ruleWasRemoved(int)), lSystem, SLOT(removeRule(int)));
+    connect(ui->rulesEditorWidget, SIGNAL(ruleWasChanged(int,std::string,std::string)), lSystem, SLOT(setRule(int,std::string,std::string)));
+
 
 
     // l-system directory browser
@@ -66,6 +83,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete lSystem;
     delete ui;
 }
 
@@ -84,7 +102,7 @@ void MainWindow::onSaveAsClicked()
 
     QFile *f = new QFile(s);
 
-    ui->centralWidget->lsystem.save(f);
+    lSystem->save(f);
 
     delete f;
 }
@@ -106,17 +124,14 @@ void MainWindow::onShowHideRulesClicked()
 
 void MainWindow::onRandomizeColorsClicked()
 {
-    ui->centralWidget->lsystem.setRandomColors();
-    updateControls();
+    lSystem->setRandomColors();
     update();
 }
 
 void MainWindow::openFile(QFile *f)
 {
-    ui->centralWidget->lsystem.load(f);
-    ui->rulesEditorWidget->loadRules(&(ui->centralWidget->lsystem));
-    updateControls();
-    update();
+    lSystem->load(f);
+    ui->rulesEditorWidget->loadRules(lSystem);
 }
 
 void MainWindow::onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
@@ -128,19 +143,7 @@ void MainWindow::onSelectionChanged(const QItemSelection &selected, const QItemS
     openFile(f);
 }
 
-
-void MainWindow::updateControls()
-{
-    ui->startXDoubleSpinBox->setValue(ui->centralWidget->lsystem.startX);
-    ui->startYDoubleSpinBox->setValue(ui->centralWidget->lsystem.startY);
-    ui->startRotationSpinBox->setValue(ui->centralWidget->lsystem.startRot);
-    ui->iterationsSpinBox->setValue(ui->centralWidget->lsystem.iterations);
-    ui->stepSpinBox->setValue(ui->centralWidget->lsystem.stepLength);
-    ui->backgroundWidget->setValue(ui->centralWidget->lsystem.backgroundColor);
-    ui->foregroundWidget->setValue(ui->centralWidget->lsystem.foregroundColor);
-}
-
 void MainWindow::on_addRuleButton_clicked()
 {
-   ui->rulesEditorWidget->addRule();
+    ui->rulesEditorWidget->addRule();
 }

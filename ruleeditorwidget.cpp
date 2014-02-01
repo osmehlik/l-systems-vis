@@ -1,19 +1,19 @@
 #include "ruleeditorwidget.h"
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QLineEdit>
 #include <QPushButton>
 #include <iostream>
+#include "mainwindow.h"
 
 RuleEditorWidget::RuleEditorWidget(QWidget *parent, const QString &from, const QString &to) :
     QWidget(parent)
 {
     QHBoxLayout *hbox = new QHBoxLayout(this);
 
-    QLineEdit *inputFrom = new QLineEdit(this);
+    inputFrom = new QLineEdit(this);
     QLabel *labelFrom = new QLabel("From:", this);
     QLabel *labelTo = new QLabel("To:", this);
-    QLineEdit *inputTo = new QLineEdit(this);
+    inputTo = new QLineEdit(this);
     QPushButton *remove = new QPushButton("Remove", this);
 
     inputFrom->setText(from);
@@ -35,15 +35,18 @@ RuleEditorWidget::RuleEditorWidget(QWidget *parent, const QString &from, const Q
 void RuleEditorWidget::onRemoveClicked()
 {
     this->deleteLater();
+    int i = parent()->children().indexOf(this) - 1;
+    emit removed(i);
 }
 
 void RuleEditorWidget::onFromChanged()
 {
-    int index = parent()->children().indexOf(this);
-
+    int i = parent()->children().indexOf(this) - 1;
+    emit changed(i, inputFrom->text().toStdString(), inputTo->text().toStdString());
 }
 
 void RuleEditorWidget::onToChanged()
 {
-
+    int i = parent()->children().indexOf(this) - 1;
+    emit changed(i, inputFrom->text().toStdString(), inputTo->text().toStdString());
 }

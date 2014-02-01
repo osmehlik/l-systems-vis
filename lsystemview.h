@@ -11,20 +11,12 @@ class LSystemView : public QWidget
 
 public:
     explicit LSystemView(QWidget *parent = 0);
-    LSystem lsystem;
-
-public slots:
-    void valueStartXChanged(double newValue);
-    void valueStartYChanged(double newValue);
-    void valueStartRotChanged(int newValue);
-    void valueIterationsChanged(int newValue);
-    void valueStepLengthChanged(int newValue);
-    void setBackgroundColor(QColor color);
-    void setForegroundColor(QColor color);
+    void setLSystem(LSystem *lsystem);
 
 protected:
     void paintEvent(QPaintEvent *e);
     void drawWidget(QPainter &qp);
+    LSystem *lsystem;
 };
 
 #endif // LSYSTEMVIEW_H

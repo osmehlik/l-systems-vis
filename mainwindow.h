@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QItemSelection>
 #include <QFileSystemModel>
+#include "lsystem.h"
 
 namespace Ui {
 class MainWindow;
@@ -16,7 +17,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void updateControls();
 
 public slots:
     void onOpenClicked();
@@ -37,6 +37,7 @@ private:
 
     Ui::MainWindow *ui;
     QFileSystemModel *fileSystemModel;
+    LSystem *lSystem;
 };
 
 #endif // MAINWINDOW_H

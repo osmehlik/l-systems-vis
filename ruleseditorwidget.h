@@ -18,8 +18,11 @@ public:
 protected:
     QVBoxLayout *vbox;
 
-
+public:
 signals:
+    void ruleWasChanged(int i, std::string from, std::string to);
+    void ruleWasAdded();
+    void ruleWasRemoved(int i);
 
 public slots:
     void onAddClicked();

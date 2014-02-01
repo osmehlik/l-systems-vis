@@ -53,6 +53,8 @@ void ColorWidget::mouseReleaseEvent(QMouseEvent * event)
 void ColorWidget::setValue(QColor color)
 {
     managedColor = color;
+    emit colorChanged(managedColor);
+    update();
 }
 
 void ColorWidget::showContextMenu(const QPoint &point)

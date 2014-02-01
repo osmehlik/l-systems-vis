@@ -5,6 +5,7 @@
 #include <QtGui>
 #include <string>
 #include <vector>
+#include <QObject>
 
 // Possible actions in CharInterpretationMap
 typedef enum
@@ -28,8 +29,11 @@ typedef std::map<char, CharInterpretation> CharInterpretationMap;
 // String rewriting rules.
 typedef std::vector<std::pair<std::string, std::string> > Rules;
 
-struct LSystem
+class LSystem : public QObject
 {
+    Q_OBJECT
+
+private:
     std::string start;
 
     Rules rules;
@@ -42,9 +46,6 @@ struct LSystem
 
     QColor backgroundColor;
     QColor foregroundColor;
-    std::string evolve(int iterations);
-
-    CharInterpretationMap interpretation;
 
 protected:
     void writeStart(QXmlStreamWriter &writer);
@@ -59,11 +60,63 @@ protected:
     void parseParameter(const QXmlStreamAttributes &attributes);
 
 public:
-    LSystem();
+    //LSystem() {}
+    Q_INVOKABLE explicit LSystem(QObject *parent=0);
+    ~LSystem();
+
+public:
+
     void load(QFile *f);
     void save(QFile *f);
     void setDefaultState();
     void setRandomColors();
+    std::string evolve(int iterations);
+
+    //TODO: move this to private, write getters
+    CharInterpretationMap interpretation;
+
+    // getters
+
+    inline std::string getStart() { return start;      }
+    inline double getStartX()     { return startX;     }
+    inline double getStartY()     { return startY;     }
+    inline int getStartRot()      { return startRot;   }
+    inline int getIterations()    { return iterations; }
+    inline int getStepLength()    { return stepLength; }
+
+    inline QColor getBackgroundColor() { return backgroundColor; }
+    inline QColor getForegroundColor() { return foregroundColor; }
+
+    inline size_t getNumRules() { return rules.size(); }
+    inline std::string getRuleFrom(size_t i) { return rules.at(i).first;  }
+    inline std::string getRuleTo(size_t i)   { return rules.at(i).second; }
+
+signals:
+    void lSystemWasChanged();
+    void startXWasChanged(double);
+    void startYWasChanged(double);
+    void startRotWasChanged(int);
+    void iterationsWasChanged(int);
+    void stepLengthWasChanged(int);
+    void backgroundColorWasChanged(QColor);
+    void foregroundColorWasChanged(QColor);
+
+    // setters
+
+public slots:
+
+    void setStart(std::string start);
+    void setStartX(double startX);
+    void setStartY(double startY);
+    void setStartRot(int startRot);
+    void setIterations(int iterations);
+    void setStepLength(int stepLength);
+    void addRule();
+
+    void setRule(int i, std::string from, std::string to);
+    void removeRule(int i);
+    void setBackgroundColor(QColor backgroundColor);
+    void setForegroundColor(QColor foregroundColor);
 };
 
 #endif // LSYSTEM_H

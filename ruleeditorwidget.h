@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QLineEdit>
 
 class RuleEditorWidget : public QWidget
 {
@@ -11,11 +12,16 @@ public:
     explicit RuleEditorWidget(QWidget *parent = 0, const QString &from = "", const QString &to = "");
 
 signals:
+    void changed(int i, std::string from, std::string to);
+    void removed(int i);
 
 public slots:
     void onRemoveClicked();
     void onFromChanged();
     void onToChanged();
+protected:
+    QLineEdit *inputFrom;
+    QLineEdit *inputTo;
 };
 
 #endif // RULEEDITORWIDGET_H

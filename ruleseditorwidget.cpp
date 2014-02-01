@@ -26,7 +26,13 @@ void RulesEditorWidget::removeContents()
 
 void RulesEditorWidget::addRule(const QString &from, const QString &to) {
     RuleEditorWidget *rule = new RuleEditorWidget(this, from, to);
+
+    connect(rule, SIGNAL(removed(int)), this, SIGNAL(ruleWasRemoved(int)));
+    connect(rule, SIGNAL(changed(int, std::string, std::string)), this, SIGNAL(ruleWasChanged(int,std::string,std::string)));
+
+
     vbox->addWidget(rule);
+    emit ruleWasAdded();
 }
 
 /*
@@ -43,9 +49,14 @@ void RulesEditorWidget::addAddButton()
 void RulesEditorWidget::loadRules(LSystem *lsystem)
 {
     removeContents();
-    for(Rules::iterator rulesIt = lsystem->rules.begin(); rulesIt != lsystem->rules.end(); ++rulesIt) {
-        addRule(rulesIt->first.c_str(), rulesIt->second.c_str());
+
+    for (size_t i(0); i < lsystem->getNumRules(); ++i) {
+        blockSignals(true);
+        addRule(lsystem->getRuleFrom(i).c_str(), lsystem->getRuleTo(i).c_str());
+        blockSignals(false);
     }
+
+    update();
     //addAddButton();
 }
 

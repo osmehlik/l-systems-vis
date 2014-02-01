@@ -19,25 +19,30 @@ void LSystemView::paintEvent(QPaintEvent *e)
 
 void LSystemView::drawWidget(QPainter &painter)
 {
+    if (lsystem == NULL) {
+        return;
+    }
+
+
     int w(size().width());
     int h(size().height());
 
     QRect widgetArea(0, 0, w, h);
 
-    painter.fillRect(widgetArea, lsystem.backgroundColor);
+    painter.fillRect(widgetArea, lsystem->getBackgroundColor());
 
-    int posX = static_cast<int>(lsystem.startX * w);
-    int posY = static_cast<int>(lsystem.startY * h);
+    int posX = static_cast<int>(lsystem->getStartX() * w);
+    int posY = static_cast<int>(lsystem->getStartY() * h);
 
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setRenderHint(QPainter::HighQualityAntialiasing);
 
-    painter.setPen(lsystem.foregroundColor);
+    painter.setPen(lsystem->getForegroundColor());
 
     painter.translate(posX, posY);
-    painter.rotate(lsystem.startRot);
+    painter.rotate(lsystem->getStartRot());
 
-    std::string lsystemstr = lsystem.evolve(lsystem.iterations);
+    std::string lsystemstr = lsystem->evolve(lsystem->getIterations());
 
     std::stack<QMatrix> matrices;
 
@@ -46,17 +51,17 @@ void LSystemView::drawWidget(QPainter &painter)
         char processedCharacter = lsystemstr[i];
 
         // skip unknown symbols, they mean do nothing
-        if (!lsystem.interpretation.count(processedCharacter)) continue;
+        if (!lsystem->interpretation.count(processedCharacter)) continue;
 
-        CharInterpretation interpretation = lsystem.interpretation[processedCharacter];
+        CharInterpretation interpretation = lsystem->interpretation[processedCharacter];
 
         switch (interpretation.action) {
             case MOVE_FORWARD:
-                painter.translate(lsystem.stepLength, 0);
+                painter.translate(lsystem->getStepLength(), 0);
             break;
             case DRAW_FORWARD:
-                painter.drawLine(0, 0, lsystem.stepLength, 0);
-                painter.translate(lsystem.stepLength, 0);
+                painter.drawLine(0, 0, lsystem->getStepLength(), 0);
+                painter.translate(lsystem->getStepLength(), 0);
             break;
             case ROTATE:
                 painter.rotate(interpretation.param);
@@ -72,48 +77,9 @@ void LSystemView::drawWidget(QPainter &painter)
     }
 }
 
-void LSystemView::valueStartXChanged(double newValue)
-{
-    lsystem.startX = newValue;
-    update();
-}
 
-void LSystemView::valueStartYChanged(double newValue)
-{
-    lsystem.startY = newValue;
-    update();
-}
 
-void LSystemView::valueStartRotChanged(int newValue)
+void LSystemView::setLSystem(LSystem *lsystem)
 {
-    lsystem.startRot = newValue;
-    update();
-}
-
-void LSystemView::valueIterationsChanged(int newValue)
-{
-    lsystem.iterations = newValue;
-    update();
-}
-
-void LSystemView::valueStepLengthChanged(int newValue)
-{
-    lsystem.stepLength = newValue;
-    update();
-}
-
-void LSystemView::setBackgroundColor(QColor color)
-{
-    if (color.isValid()) {
-        lsystem.backgroundColor = color;
-    }
-    update();
-}
-
-void LSystemView::setForegroundColor(QColor color)
-{
-    if (color.isValid()) {
-        lsystem.foregroundColor = color;
-    }
-    update();
+    this->lsystem = lsystem;
 }
