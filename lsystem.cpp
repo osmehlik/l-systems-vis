@@ -18,7 +18,7 @@ void LSystem::setDefaultState()
 {
     start = "";
     rules.clear();
-    interpretation.clear();
+    interpretations.clear();
     startX = 0.5;
     startY = 0.5;
     startRot = 0;
@@ -109,19 +109,19 @@ void LSystem::writeRules(QXmlStreamWriter &writer)
 
 void LSystem::writeSymbols(QXmlStreamWriter &writer)
 {
-    typedef CharInterpretationMap::iterator CharInterpretationMapIt;
-
     writer.writeStartElement("symbols");
-    for (CharInterpretationMapIt it(interpretation.begin()); it != interpretation.end(); ++it) {
+    for (size_t i(0); i < getNumInterpretations(); ++i) {
+        const CharInterpretation &interpretation = getInterpretation(i);
+
         writer.writeStartElement("symbol");
 
         std::stringstream ss;
 
-        ss << it->first;
+        ss << interpretation.symbol;
 
         writer.writeAttribute("name", ss.str().c_str());
 
-        switch (it->second.action) {
+        switch (interpretation.action) {
             case DRAW_FORWARD:
                 writer.writeAttribute("interpretation", "draw");
                 break;
@@ -131,7 +131,7 @@ void LSystem::writeSymbols(QXmlStreamWriter &writer)
 
                     std::stringstream ss;
 
-                    ss << it->second.param;
+                    ss << interpretation.param;
 
                     writer.writeAttribute("param", ss.str().c_str());
                 }
@@ -266,6 +266,8 @@ void LSystem::parseSymbol(const QXmlStreamAttributes &attributes)
 
     CharInterpretation interpretation;
 
+    interpretation.symbol = name.at(0);
+
     if (interpretationS == "draw") {
         interpretation.action = DRAW_FORWARD;
     }
@@ -284,7 +286,7 @@ void LSystem::parseSymbol(const QXmlStreamAttributes &attributes)
     }
     else return;
 
-    this->interpretation.insert(std::make_pair(name[0],interpretation));
+    this->interpretations.push_back(interpretation);
 }
 
 void LSystem::parseParameter(const QXmlStreamAttributes &attributes)
@@ -426,6 +428,31 @@ void LSystem::setForegroundColor(QColor foregroundColor)
 }
 
 
+void LSystem::addInterpretation()
+{
+    interpretations.push_back(CharInterpretation());
+}
 
+
+void LSystem::setInterpretationLetter(size_t i, char s)
+{
+    interpretations.at(i).symbol = s;
+}
+
+
+void LSystem::setInterpretationAction(size_t i, CharInterpretationAction action)
+{
+    interpretations.at(i).action = action;
+}
+
+void LSystem::setInterpretationParam(size_t i, int param)
+{
+    interpretations.at(i).param = param;
+}
+
+void LSystem::removeInterpretation(size_t i)
+{
+    interpretations.erase(interpretations.begin() + i);
+}
 
 

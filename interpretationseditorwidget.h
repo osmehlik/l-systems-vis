@@ -11,6 +11,8 @@ class InterpretationsEditorWidget : public QWidget
 public:
     explicit InterpretationsEditorWidget(QWidget *parent = 0);
     void addInterpretation(char c, CharInterpretationAction action, int param = 0);
+    void loadInterpretations(LSystem *lSystem);
+    void removeContents();
 protected:
     QVBoxLayout *vbox;
 

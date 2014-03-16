@@ -7,7 +7,6 @@
 #include <vector>
 #include <QObject>
 
-// Possible actions in CharInterpretationMap
 typedef enum
 {
     MOVE_FORWARD,
@@ -19,12 +18,13 @@ typedef enum
 
 typedef struct
 {
+    char symbol;
     CharInterpretationAction action;
     int param;
 } CharInterpretation;
 
-// CharInterpretationMap describes what action each character describes.
-typedef std::map<char, CharInterpretation> CharInterpretationMap;
+// What action each character describes.
+typedef std::vector<CharInterpretation > CharInterpretations;
 
 // String rewriting rules.
 typedef std::vector<std::pair<std::string, std::string> > Rules;
@@ -34,9 +34,10 @@ class LSystem : public QObject
     Q_OBJECT
 
 private:
-    std::string start;
+    std::string start; // initial string
 
-    Rules rules;
+    Rules rules; // string rewriting rules
+    CharInterpretations interpretations; // how to interpret chars in string
 
     double startX; // between 0 and 1, 0 = left edge, 1 = right edge
     double startY; // between 0 and 1, 0 = top edge, 1 = bottom edge
@@ -72,9 +73,6 @@ public:
     void setRandomColors();
     std::string evolve(int iterations);
 
-    //TODO: move this to private, write getters
-    CharInterpretationMap interpretation;
-
     // getters
 
     inline std::string getStart() { return start;      }
@@ -90,6 +88,12 @@ public:
     inline size_t getNumRules() { return rules.size(); }
     inline std::string getRuleFrom(size_t i) { return rules.at(i).first;  }
     inline std::string getRuleTo(size_t i)   { return rules.at(i).second; }
+
+    inline size_t getNumInterpretations() { return interpretations.size(); }
+    inline const CharInterpretation& getInterpretation(size_t i) { return interpretations.at(i); }
+    inline char getInterpretationSymbol(size_t i) { return interpretations.at(i).symbol; }
+    inline CharInterpretationAction getInterpretationAction(size_t i) { return interpretations.at(i).action; }
+    inline int getInterpretationParam(size_t i) { return interpretations.at(i).param; }
 
 signals:
     void lSystemWasChanged();
@@ -117,6 +121,12 @@ public slots:
     void removeRule(int i);
     void setBackgroundColor(QColor backgroundColor);
     void setForegroundColor(QColor foregroundColor);
+
+    void addInterpretation();
+    void setInterpretationLetter(size_t i, char s);
+    void setInterpretationAction(size_t i, CharInterpretationAction action);
+    void setInterpretationParam(size_t i, int param);
+    void removeInterpretation(size_t i);
 };
 
 #endif // LSYSTEM_H

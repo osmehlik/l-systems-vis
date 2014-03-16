@@ -132,6 +132,7 @@ void MainWindow::openFile(QFile *f)
 {
     lSystem->load(f);
     ui->rulesEditorWidget->loadRules(lSystem);
+    ui->interpretationsEditorWidget->loadInterpretations(lSystem);
 }
 
 void MainWindow::onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)

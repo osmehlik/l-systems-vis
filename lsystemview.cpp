@@ -46,14 +46,29 @@ void LSystemView::drawWidget(QPainter &painter)
 
     std::stack<QMatrix> matrices;
 
+
+
+
+
+
+
     for (unsigned i(0); i < lsystemstr.length(); ++i) {
 
         char processedCharacter = lsystemstr[i];
+        int processedIndex = -1;
+
+        // find symbol
+        for (int i(0); i < lsystem->getNumInterpretations(); ++i) {
+            if (lsystem->getInterpretationSymbol(i) == processedCharacter) {
+                processedIndex = i;
+            }
+        }
+
 
         // skip unknown symbols, they mean do nothing
-        if (!lsystem->interpretation.count(processedCharacter)) continue;
+        if (processedIndex == -1) continue;
 
-        CharInterpretation interpretation = lsystem->interpretation[processedCharacter];
+        const CharInterpretation &interpretation(lsystem->getInterpretation(processedIndex));
 
         switch (interpretation.action) {
             case MOVE_FORWARD:
@@ -70,8 +85,10 @@ void LSystemView::drawWidget(QPainter &painter)
                 matrices.push(painter.matrix());
             break;
             case POP_MATRIX:
-                painter.setMatrix(matrices.top());
-                matrices.pop();
+                if (matrices.size() > 0) {
+                    painter.setMatrix(matrices.top());
+                    matrices.pop();
+                }
             break;
         }
     }
