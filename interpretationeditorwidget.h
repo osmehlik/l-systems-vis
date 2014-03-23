@@ -14,16 +14,19 @@ public:
     void setSymbol(char c);
     void setAction(CharInterpretationAction action);
     void setParam(int i);
+    void setLSystem(LSystem *lsystem, int lSystemInterpretationIndex);
 protected:
     QLineEdit *symbolLineEdit;
-    QComboBox *interpretationActionComboBox;
-    QLineEdit *parameterLineEdit;
-
+    QComboBox *actionComboBox;
+    QLineEdit *paramLineEdit;
+    LSystem *lsystem;
+    int lsystemInterpretationIndex;
 signals:
 
 public slots:
     void onInterpretationIndexChanged(int i);
-
+    void onSymbolChanged();
+    void onParamChanged();
 };
 
 #endif // INTERPRETATIONEDITORWIDGET_H

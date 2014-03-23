@@ -15,7 +15,8 @@ public:
     void removeContents();
 protected:
     QVBoxLayout *vbox;
-
+    LSystem *lsystem;
+    size_t currentInterpretationIndex;
 signals:
 
 public slots:

@@ -6,8 +6,7 @@ InterpretationsEditorWidget::InterpretationsEditorWidget(QWidget *parent) :
 {
     vbox = new QVBoxLayout(this);
 
-
-    //addInterpretation('F', DRAW_FORWARD, 20);
+    currentInterpretationIndex = 0;
 
     setLayout(vbox);
 }
@@ -17,6 +16,7 @@ void InterpretationsEditorWidget::addInterpretation(char c, CharInterpretationAc
 {
     InterpretationEditorWidget *interpretation = new InterpretationEditorWidget(this);
 
+    interpretation->setLSystem(lsystem, currentInterpretationIndex++);
     interpretation->setAction(action);
     interpretation->setSymbol(c);
     interpretation->setParam(param);
@@ -26,12 +26,16 @@ void InterpretationsEditorWidget::addInterpretation(char c, CharInterpretationAc
 
 void InterpretationsEditorWidget::loadInterpretations(LSystem *lSystem)
 {
+    this->lsystem = lSystem;
+    currentInterpretationIndex = 0;
+
     int numInterpretations = lSystem->getNumInterpretations();
 
     removeContents();
 
     for (int i(0); i < numInterpretations; ++i) {
         const CharInterpretation ci = lSystem->getInterpretation(i);
+        lsystem->addInterpretation();
         addInterpretation(ci.symbol,ci.action,ci.param);
     }
 }

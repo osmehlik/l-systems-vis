@@ -436,18 +436,27 @@ void LSystem::addInterpretation()
 
 void LSystem::setInterpretationLetter(size_t i, char s)
 {
-    interpretations.at(i).symbol = s;
+    if (interpretations.at(i).symbol != s) {
+        interpretations.at(i).symbol = s;
+        emit lSystemWasChanged();
+    }
 }
 
 
 void LSystem::setInterpretationAction(size_t i, CharInterpretationAction action)
 {
-    interpretations.at(i).action = action;
+    if (interpretations.at(i).action != action) {
+        interpretations.at(i).action = action;
+        emit lSystemWasChanged();
+    }
 }
 
 void LSystem::setInterpretationParam(size_t i, int param)
 {
-    interpretations.at(i).param = param;
+    if (interpretations.at(i).param != param) {
+        interpretations.at(i).param = param;
+        emit lSystemWasChanged();
+    }
 }
 
 void LSystem::removeInterpretation(size_t i)

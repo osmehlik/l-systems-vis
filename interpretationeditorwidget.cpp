@@ -17,40 +17,73 @@ InterpretationEditorWidget::InterpretationEditorWidget(QWidget *parent) :
     symbolLineEdit->setMaxLength(1);
 
     QLabel *interpretationLabel = new QLabel("Interpretation:", this);
-    interpretationActionComboBox = new QComboBox(this);
+    actionComboBox = new QComboBox(this);
 
     QLabel *parameterLabel = new QLabel("Parameter:", this);
-    parameterLineEdit = new QLineEdit(this);
-    parameterLineEdit->setEnabled(false); // default value move forward currently requires no argument
+    paramLineEdit = new QLineEdit(this);
+    paramLineEdit->setEnabled(false); // default value move forward currently requires no argument
 
-    interpretationActionComboBox->addItem("Move Forward");
-    interpretationActionComboBox->addItem("Draw Forward");
-    interpretationActionComboBox->addItem("Rotate");
-    interpretationActionComboBox->addItem("Push Matrix");
-    interpretationActionComboBox->addItem("Pop Matrix");
+    actionComboBox->addItem("Move Forward");
+    actionComboBox->addItem("Draw Forward");
+    actionComboBox->addItem("Rotate");
+    actionComboBox->addItem("Push Matrix");
+    actionComboBox->addItem("Pop Matrix");
 
-    connect(interpretationActionComboBox, SIGNAL(currentIndexChanged(int)),
+    connect(actionComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(onInterpretationIndexChanged(int)));
-
+    connect(symbolLineEdit, SIGNAL(editingFinished()),
+            this, SLOT(onSymbolChanged()));
+    connect(paramLineEdit, SIGNAL(editingFinished()),
+            this, SLOT(onParamChanged()));
 
     hbox->addWidget(symbolLabel);
     hbox->addWidget(symbolLineEdit);
     hbox->addWidget(interpretationLabel);
-    hbox->addWidget(interpretationActionComboBox);
+    hbox->addWidget(actionComboBox);
     hbox->addWidget(parameterLabel);
-    hbox->addWidget(parameterLineEdit);
+    hbox->addWidget(paramLineEdit);
 
     setLayout(hbox);
 }
 
 void InterpretationEditorWidget::onInterpretationIndexChanged(int i)
 {
-    parameterLineEdit->setEnabled(i == ROTATE);
+    paramLineEdit->setEnabled(i == ROTATE);
+    if (lsystem) {
+        lsystem->setInterpretationAction(lsystemInterpretationIndex, static_cast<CharInterpretationAction>(i));
+    }
+}
+
+void InterpretationEditorWidget::onSymbolChanged()
+{
+    if (lsystem) {
+        char c = symbolLineEdit->text().toStdString().at(0);
+        lsystem->setInterpretationLetter(lsystemInterpretationIndex, c);
+    }
+}
+
+void InterpretationEditorWidget::onParamChanged()
+{
+    if (lsystem) {
+        std::stringstream ss;
+        ss.str(paramLineEdit->text().toStdString());
+        int param;
+
+        ss >> param;
+
+        lsystem->setInterpretationParam(lsystemInterpretationIndex, param);
+    }
+}
+
+void InterpretationEditorWidget::setLSystem(LSystem *lsystem, int lsystemInterpretationIndex)
+{
+    this->lsystem = lsystem;
+    this->lsystemInterpretationIndex = lsystemInterpretationIndex;
 }
 
 void InterpretationEditorWidget::setAction(CharInterpretationAction action)
 {
-    interpretationActionComboBox->setCurrentIndex(static_cast<int>(action));
+    actionComboBox->setCurrentIndex(static_cast<int>(action));
 }
 
 void InterpretationEditorWidget::setSymbol(char c)
@@ -64,5 +97,5 @@ void InterpretationEditorWidget::setParam(int i)
 {
     std::stringstream ss;
     ss << i;
-    parameterLineEdit->setText(ss.str().c_str());
+    paramLineEdit->setText(ss.str().c_str());
 }
