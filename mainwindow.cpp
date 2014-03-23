@@ -148,3 +148,9 @@ void MainWindow::on_addRuleButton_clicked()
 {
     ui->rulesEditorWidget->addRule();
 }
+
+void MainWindow::on_addInterpretationButton_clicked()
+{
+    lSystem->addInterpretation();
+    ui->interpretationsEditorWidget->addInterpretation('?', MOVE_FORWARD);
+}

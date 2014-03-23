@@ -29,7 +29,8 @@ public slots:
     void onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
 private slots:
-    void on_addRuleButton_clicked();
+    void on_addRuleButton_clicked();    
+    void on_addInterpretationButton_clicked();
 
 private:
 

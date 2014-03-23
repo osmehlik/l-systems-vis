@@ -167,7 +167,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="addInterpretationButton">
            <property name="text">
             <string>Add Interpretation</string>
            </property>
