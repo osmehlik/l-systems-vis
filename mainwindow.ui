@@ -96,8 +96,23 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
+       <widget class="QWidget" name="tabAxiom">
+        <attribute name="title">
+         <string>Axiom</string>
+        </attribute>
+        <widget class="QLineEdit" name="axiomLineEdit">
+         <property name="geometry">
+          <rect>
+           <x>200</x>
+           <y>50</y>
+           <width>351</width>
+           <height>21</height>
+          </rect>
+         </property>
+        </widget>
+       </widget>
        <widget class="QWidget" name="tabRules">
         <attribute name="title">
          <string>Rules</string>

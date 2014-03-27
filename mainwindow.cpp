@@ -57,6 +57,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->rulesEditorWidget, SIGNAL(ruleWasRemoved(int)), lSystem, SLOT(removeRule(int)));
     connect(ui->rulesEditorWidget, SIGNAL(ruleWasChanged(int,std::string,std::string)), lSystem, SLOT(setRule(int,std::string,std::string)));
 
+    connect(ui->axiomLineEdit, SIGNAL(editingFinished()), this, SLOT(onAxiomChanged()));
 
 
     // l-system directory browser
@@ -133,6 +134,7 @@ void MainWindow::openFile(QFile *f)
     lSystem->load(f);
     ui->rulesEditorWidget->loadRules(lSystem);
     ui->interpretationsEditorWidget->loadInterpretations(lSystem);
+    ui->axiomLineEdit->setText(lSystem->getStart().c_str());
 }
 
 void MainWindow::onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
@@ -153,4 +155,9 @@ void MainWindow::on_addInterpretationButton_clicked()
 {
     lSystem->addInterpretation();
     ui->interpretationsEditorWidget->addInterpretation('?', MOVE_FORWARD);
+}
+
+void MainWindow::onAxiomChanged()
+{
+    lSystem->setStart(ui->axiomLineEdit->text().toStdString());
 }

@@ -27,6 +27,7 @@ public slots:
     void onRandomizeColorsClicked();
 
     void onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+    void onAxiomChanged();
 
 private slots:
     void on_addRuleButton_clicked();    
