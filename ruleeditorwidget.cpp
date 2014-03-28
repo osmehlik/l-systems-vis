@@ -32,21 +32,23 @@ RuleEditorWidget::RuleEditorWidget(QWidget *parent, const QString &from, const Q
     setLayout(hbox);
 }
 
+int RuleEditorWidget::getIndexInParent()
+{
+    return parent()->children().indexOf(this) - 1;
+}
+
 void RuleEditorWidget::onRemoveClicked()
 {
     this->deleteLater();
-    int i = parent()->children().indexOf(this) - 1;
-    emit removed(i);
+    emit removed(getIndexInParent());
 }
 
 void RuleEditorWidget::onFromChanged()
 {
-    int i = parent()->children().indexOf(this) - 1;
-    emit changed(i, inputFrom->text().toStdString(), inputTo->text().toStdString());
+    emit changed(getIndexInParent(), inputFrom->text().toStdString(), inputTo->text().toStdString());
 }
 
 void RuleEditorWidget::onToChanged()
 {
-    int i = parent()->children().indexOf(this) - 1;
-    emit changed(i, inputFrom->text().toStdString(), inputTo->text().toStdString());
+    emit changed(getIndexInParent(), inputFrom->text().toStdString(), inputTo->text().toStdString());
 }

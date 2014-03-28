@@ -18,6 +18,7 @@ public:
     CharInterpretationAction getAction();
     int getParam();
     CharInterpretation getInterpretation();
+    int getIndexInParent();
 protected:
     QLineEdit *symbolLineEdit;
     QComboBox *actionComboBox;

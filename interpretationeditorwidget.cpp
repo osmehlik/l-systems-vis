@@ -53,30 +53,31 @@ InterpretationEditorWidget::InterpretationEditorWidget(QWidget *parent) :
     setLayout(hbox);
 }
 
+int InterpretationEditorWidget::getIndexInParent()
+{
+    return parent()->children().indexOf(this) - 1;
+}
+
 void InterpretationEditorWidget::onInterpretationIndexChanged(int i)
 {
     paramLineEdit->setEnabled(i == ROTATE);
-    int i2 = parent()->children().indexOf(this) - 1;
-    emit changed(i2, getInterpretation());
+    emit changed(getIndexInParent(), getInterpretation());
 }
 
 void InterpretationEditorWidget::onSymbolChanged()
 {
-    int i = parent()->children().indexOf(this) - 1;
-    emit changed(i, getInterpretation());
+    emit changed(getIndexInParent(), getInterpretation());
 }
 
 void InterpretationEditorWidget::onParamChanged()
 {
-    int i = parent()->children().indexOf(this) - 1;
-    emit changed(i, getInterpretation());
+    emit changed(getIndexInParent(), getInterpretation());
 }
 
 void InterpretationEditorWidget::onRemoveClicked()
 {
     this->deleteLater();
-    int i = parent()->children().indexOf(this) - 1;
-    emit removed(i);
+    emit removed(getIndexInParent());
 }
 
 void InterpretationEditorWidget::setAction(CharInterpretationAction action)
