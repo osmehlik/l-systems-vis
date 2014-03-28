@@ -16,12 +16,16 @@ void InterpretationsEditorWidget::addInterpretation(char c, CharInterpretationAc
 {
     InterpretationEditorWidget *interpretation = new InterpretationEditorWidget(this);
 
-    interpretation->setLSystem(lsystem, currentInterpretationIndex++);
     interpretation->setAction(action);
     interpretation->setSymbol(c);
     interpretation->setParam(param);
 
+    connect(interpretation, SIGNAL(changed(int,CharInterpretation)), this, SIGNAL(interpretationWasChanged(int,CharInterpretation)));
+    connect(interpretation, SIGNAL(removed(int)), this, SIGNAL(interpretationWasRemoved(int)));
+
     vbox->addWidget(interpretation);
+
+    emit interpretationWasAdded();
 }
 
 void InterpretationsEditorWidget::loadInterpretations(LSystem *lSystem)
@@ -33,11 +37,13 @@ void InterpretationsEditorWidget::loadInterpretations(LSystem *lSystem)
 
     removeContents();
 
+    blockSignals(true);
     for (int i(0); i < numInterpretations; ++i) {
         const CharInterpretation ci = lSystem->getInterpretation(i);
         lsystem->addInterpretation();
         addInterpretation(ci.symbol,ci.action,ci.param);
     }
+    blockSignals(false);
 }
 
 void InterpretationsEditorWidget::removeContents()
@@ -48,3 +54,4 @@ void InterpretationsEditorWidget::removeContents()
         delete child;
     }
 }
+

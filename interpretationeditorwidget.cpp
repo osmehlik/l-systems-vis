@@ -1,5 +1,6 @@
 #include "interpretationeditorwidget.h"
 #include "lsystem.h"
+#include <QPushButton>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QComboBox>
@@ -29,12 +30,16 @@ InterpretationEditorWidget::InterpretationEditorWidget(QWidget *parent) :
     actionComboBox->addItem("Push Matrix");
     actionComboBox->addItem("Pop Matrix");
 
+    QPushButton *removeButton = new QPushButton("Remove", this);
+
     connect(actionComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(onInterpretationIndexChanged(int)));
     connect(symbolLineEdit, SIGNAL(editingFinished()),
             this, SLOT(onSymbolChanged()));
     connect(paramLineEdit, SIGNAL(editingFinished()),
             this, SLOT(onParamChanged()));
+    connect(removeButton, SIGNAL(clicked()),
+            this, SLOT(onRemoveClicked()));
 
     hbox->addWidget(symbolLabel);
     hbox->addWidget(symbolLineEdit);
@@ -43,42 +48,35 @@ InterpretationEditorWidget::InterpretationEditorWidget(QWidget *parent) :
     hbox->addWidget(parameterLabel);
     hbox->addWidget(paramLineEdit);
 
+    hbox->addWidget(removeButton);
+
     setLayout(hbox);
 }
 
 void InterpretationEditorWidget::onInterpretationIndexChanged(int i)
 {
     paramLineEdit->setEnabled(i == ROTATE);
-    if (lsystem) {
-        lsystem->setInterpretationAction(lsystemInterpretationIndex, static_cast<CharInterpretationAction>(i));
-    }
+    int i2 = parent()->children().indexOf(this) - 1;
+    emit changed(i2, getInterpretation());
 }
 
 void InterpretationEditorWidget::onSymbolChanged()
 {
-    if (lsystem) {
-        char c = symbolLineEdit->text().toStdString().at(0);
-        lsystem->setInterpretationLetter(lsystemInterpretationIndex, c);
-    }
+    int i = parent()->children().indexOf(this) - 1;
+    emit changed(i, getInterpretation());
 }
 
 void InterpretationEditorWidget::onParamChanged()
 {
-    if (lsystem) {
-        std::stringstream ss;
-        ss.str(paramLineEdit->text().toStdString());
-        int param;
-
-        ss >> param;
-
-        lsystem->setInterpretationParam(lsystemInterpretationIndex, param);
-    }
+    int i = parent()->children().indexOf(this) - 1;
+    emit changed(i, getInterpretation());
 }
 
-void InterpretationEditorWidget::setLSystem(LSystem *lsystem, int lsystemInterpretationIndex)
+void InterpretationEditorWidget::onRemoveClicked()
 {
-    this->lsystem = lsystem;
-    this->lsystemInterpretationIndex = lsystemInterpretationIndex;
+    this->deleteLater();
+    int i = parent()->children().indexOf(this) - 1;
+    emit removed(i);
 }
 
 void InterpretationEditorWidget::setAction(CharInterpretationAction action)
@@ -98,4 +96,36 @@ void InterpretationEditorWidget::setParam(int i)
     std::stringstream ss;
     ss << i;
     paramLineEdit->setText(ss.str().c_str());
+}
+
+char InterpretationEditorWidget::getSymbol()
+{
+    std::string s = symbolLineEdit->text().toStdString();
+    return static_cast<char>(s.size() > 0 ? s.at(0) : ' ');
+}
+
+CharInterpretationAction InterpretationEditorWidget::getAction()
+{
+    return static_cast<CharInterpretationAction>(actionComboBox->currentIndex());
+}
+
+int InterpretationEditorWidget::getParam()
+{
+    std::stringstream ss;
+    ss.str(paramLineEdit->text().toStdString());
+    int param;
+
+    ss >> param;
+    return param;
+}
+
+CharInterpretation InterpretationEditorWidget::getInterpretation()
+{
+    CharInterpretation result;
+
+    result.symbol = getSymbol();
+    result.action = getAction();
+    result.param = getParam();
+
+    return result;
 }

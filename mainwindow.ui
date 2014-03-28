@@ -96,22 +96,36 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tabAxiom">
         <attribute name="title">
          <string>Axiom</string>
         </attribute>
-        <widget class="QLineEdit" name="axiomLineEdit">
-         <property name="geometry">
-          <rect>
-           <x>200</x>
-           <y>50</y>
-           <width>351</width>
-           <height>21</height>
-          </rect>
-         </property>
-        </widget>
+        <layout class="QVBoxLayout" name="verticalLayout_7">
+         <item>
+          <widget class="QLineEdit" name="axiomLineEdit">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>24</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
        <widget class="QWidget" name="tabRules">
         <attribute name="title">
@@ -153,7 +167,7 @@
          <item>
           <widget class="QPushButton" name="addRuleButton">
            <property name="text">
-            <string>Add</string>
+            <string>Add Rule</string>
            </property>
           </widget>
          </item>

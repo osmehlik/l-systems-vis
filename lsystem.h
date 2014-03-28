@@ -16,11 +16,14 @@ typedef enum
     POP_MATRIX
 } CharInterpretationAction;
 
-typedef struct
+typedef struct CharInterpretation_s
 {
     char symbol;
     CharInterpretationAction action;
     int param;
+
+    inline CharInterpretation_s() : symbol(' '), action(MOVE_FORWARD), param(0) {}
+
 } CharInterpretation;
 
 // What action each character describes.
@@ -126,7 +129,8 @@ public slots:
     void setInterpretationLetter(size_t i, char s);
     void setInterpretationAction(size_t i, CharInterpretationAction action);
     void setInterpretationParam(size_t i, int param);
-    void removeInterpretation(size_t i);
+    void setInterpretation(int i, CharInterpretation ci);
+    void removeInterpretation(int i);
 };
 
 #endif // LSYSTEM_H

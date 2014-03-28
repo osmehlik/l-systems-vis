@@ -18,9 +18,11 @@ protected:
     LSystem *lsystem;
     size_t currentInterpretationIndex;
 signals:
+    void interpretationWasChanged(int i, CharInterpretation ci);
+    void interpretationWasAdded();
+    void interpretationWasRemoved(int i);
 
 public slots:
-
 };
 
 #endif // INTERPRETATIONSEDITORWIDGET_H

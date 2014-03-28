@@ -8,11 +8,7 @@ RulesEditorWidget::RulesEditorWidget(QWidget *parent) :
     vbox = new QVBoxLayout(this);
     setLayout(vbox);
 
-    //addRule();
-    //addRule();
-    //addRule();
     addRule();
-    //addAddButton();
 }
 
 void RulesEditorWidget::removeContents()

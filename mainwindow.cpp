@@ -57,6 +57,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->rulesEditorWidget, SIGNAL(ruleWasRemoved(int)), lSystem, SLOT(removeRule(int)));
     connect(ui->rulesEditorWidget, SIGNAL(ruleWasChanged(int,std::string,std::string)), lSystem, SLOT(setRule(int,std::string,std::string)));
 
+    // Connect interpretation editing signals to slots
+    connect(ui->interpretationsEditorWidget, SIGNAL(interpretationWasAdded()), lSystem, SLOT(addInterpretation()));
+    connect(ui->interpretationsEditorWidget, SIGNAL(interpretationWasChanged(int,CharInterpretation)), lSystem, SLOT(setInterpretation(int,CharInterpretation)));
+    connect(ui->interpretationsEditorWidget, SIGNAL(interpretationWasRemoved(int)), lSystem, SLOT(removeInterpretation(int)));
+
     connect(ui->axiomLineEdit, SIGNAL(editingFinished()), this, SLOT(onAxiomChanged()));
 
 

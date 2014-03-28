@@ -459,9 +459,20 @@ void LSystem::setInterpretationParam(size_t i, int param)
     }
 }
 
-void LSystem::removeInterpretation(size_t i)
+void LSystem::setInterpretation(int i, CharInterpretation ci)
+{
+    if ( (interpretations.at(i).param != ci.param)
+         || (interpretations.at(i).action != ci.action)
+         || (interpretations.at(i).symbol != ci.symbol)) {
+        interpretations.at(i) = ci;
+        emit lSystemWasChanged();
+    }
+}
+
+void LSystem::removeInterpretation(int i)
 {
     interpretations.erase(interpretations.begin() + i);
+    emit lSystemWasChanged();
 }
 
 
