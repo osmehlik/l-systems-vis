@@ -17,6 +17,7 @@ void LSystem::loadDefault()
     rules.clear();
     interpretations.clear();
 
+    path = "";
     setStart("");
     setStartX(0.5);
     setStartY(0.5);

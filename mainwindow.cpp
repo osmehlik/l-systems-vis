@@ -140,6 +140,7 @@ void MainWindow::onSaveClicked()
     } else {
         QFile f(lSystem->getPath().c_str());
         lSystem->save(&f);
+        setWindowModified(false);
     }
 }
 
@@ -153,6 +154,8 @@ void MainWindow::onSaveAsClicked()
     QFile f(s);
 
     lSystem->save(&f);
+
+    setWindowModified(false);
 }
 
 void MainWindow::onShowHideBrowserClicked()
