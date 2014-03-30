@@ -18,9 +18,22 @@ MainWindow::MainWindow(QWidget *parent) :
     lSystem = new LSystem();
     ui->centralWidget->setLSystem(lSystem);
 
-    // Update lsystem when controls changes
+    setWindowFilePath("Untitled");
 
+    // Connect actions to menu items.
+    connect(ui->actionNew, SIGNAL(triggered()), this, SLOT(onNewClicked()));
+    connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenClicked()));
+    connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(onSaveClicked()));
+    connect(ui->actionSaveAs, SIGNAL(triggered()), this, SLOT(onSaveAsClicked()));
+    connect(ui->actionShowHideBrowser, SIGNAL(triggered()), this, SLOT(onShowHideBrowserClicked()));
+    connect(ui->actionShowHideProperties, SIGNAL(triggered()), this, SLOT(onShowHidePropertiesClicked()));
+    connect(ui->actionShowHideRules, SIGNAL(triggered()), this, SLOT(onShowHideRulesClicked()));
 
+    // After L-System is opened, update rules and interpretations editor widget contents.
+    connect(lSystem, SIGNAL(loaded(LSystem*)), ui->rulesEditorWidget, SLOT(load(LSystem*)));
+    connect(lSystem, SIGNAL(loaded(LSystem*)), ui->interpretationsEditorWidget, SLOT(load(LSystem*)));
+
+    // Update L-System on controls change
     connect(ui->startXDoubleSpinBox, SIGNAL(valueChanged(double)), lSystem, SLOT(setStartX(double)));
     connect(ui->startYDoubleSpinBox, SIGNAL(valueChanged(double)), lSystem, SLOT(setStartY(double)));
     connect(ui->startRotationSpinBox, SIGNAL(valueChanged(int)), lSystem, SLOT(setStartRot(int)));
@@ -29,9 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->backgroundWidget, SIGNAL(colorChanged(QColor)), lSystem, SLOT(setBackgroundColor(QColor)));
     connect(ui->foregroundWidget, SIGNAL(colorChanged(QColor)), lSystem, SLOT(setForegroundColor(QColor)));
 
-
-    // Update controls when lsystem changes
-
+    // Update controls on L-System change
     connect(lSystem, SIGNAL(startXWasChanged(double)), ui->startXDoubleSpinBox, SLOT(setValue(double)));
     connect(lSystem, SIGNAL(startYWasChanged(double)), ui->startYDoubleSpinBox, SLOT(setValue(double)));
     connect(lSystem, SIGNAL(startRotWasChanged(int)), ui->startRotationSpinBox, SLOT(setValue(int)));
@@ -39,18 +50,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(lSystem, SIGNAL(stepLengthWasChanged(int)), ui->stepSpinBox, SLOT(setValue(int)));
     connect(lSystem, SIGNAL(backgroundColorWasChanged(QColor)), ui->backgroundWidget, SLOT(setValue(QColor)));
     connect(lSystem, SIGNAL(foregroundColorWasChanged(QColor)), ui->foregroundWidget, SLOT(setValue(QColor)));
-
-    // Redraw lSystemView on lSystem change.
-    connect(lSystem, SIGNAL(lSystemWasChanged()), ui->centralWidget, SLOT(update()));
-
-    // Connect actions to menu items.
-    connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenClicked()));
-    connect(ui->actionSaveAs, SIGNAL(triggered()), this, SLOT(onSaveAsClicked()));
-    connect(ui->actionShowHideBrowser, SIGNAL(triggered()), this, SLOT(onShowHideBrowserClicked()));
-    connect(ui->actionShowHideProperties, SIGNAL(triggered()), this, SLOT(onShowHidePropertiesClicked()));
-    connect(ui->actionShowHideRules, SIGNAL(triggered()), this, SLOT(onShowHideRulesClicked()));
-
-    connect(ui->randomizeButton, SIGNAL(clicked()), this, SLOT(onRandomizeColorsClicked()));
 
     // Connect rules editing signals to slots.
     connect(ui->rulesEditorWidget, SIGNAL(ruleWasAdded()), lSystem, SLOT(addRule()));
@@ -62,8 +61,23 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->interpretationsEditorWidget, SIGNAL(interpretationWasChanged(int,CharInterpretation)), lSystem, SLOT(setInterpretation(int,CharInterpretation)));
     connect(ui->interpretationsEditorWidget, SIGNAL(interpretationWasRemoved(int)), lSystem, SLOT(removeInterpretation(int)));
 
+
+    // Redraw lSystemView on lSystem change.
+    connect(lSystem, SIGNAL(changed()), ui->centralWidget, SLOT(update()));
+
+    connect(ui->randomizeButton, SIGNAL(clicked()), this, SLOT(onRandomizeColorsClicked()));
+
+
     connect(ui->axiomLineEdit, SIGNAL(editingFinished()), this, SLOT(onAxiomChanged()));
 
+
+    connect(lSystem, SIGNAL(changed()), this, SLOT(onLSystemChanged()));
+
+    // Set menu items shortcuts
+    ui->actionNew->setShortcuts(QKeySequence::New);
+    ui->actionOpen->setShortcuts(QKeySequence::Open);
+    ui->actionSave->setShortcuts(QKeySequence::Save);
+    ui->actionSaveAs->setShortcuts(QKeySequence::SaveAs);
 
     // l-system directory browser
 
@@ -93,24 +107,52 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::onNewClicked()
+{
+    if (unchangedOrConfirmedLosingChanges()) {
+        lSystem->loadDefault();
+        ui->axiomLineEdit->setText(lSystem->getStart().c_str());
+        setWindowModified(false);
+        setWindowFilePath("Untitled");
+    }
+}
+
 void MainWindow::onOpenClicked()
 {
-    QString s = QFileDialog::getOpenFileName(this,
-                                               tr("Open L-System File"), "", tr("L-System Files (*.lsys)"));
-    QFile *f = new QFile(s);
+    if (unchangedOrConfirmedLosingChanges()) {
+        // find name of a file
+        QString s = QFileDialog::getOpenFileName(
+            this,
+            tr("Open L-System File"),
+            "",
+            tr("L-System Files (*.lsys)")
+        );
+        QFile f(s);
 
-    openFile(f);
+        openFile(&f);
+    }
+}
+
+void MainWindow::onSaveClicked()
+{
+    if (lSystem->getPath().empty()) {
+        onSaveAsClicked();
+    } else {
+        QFile f(lSystem->getPath().c_str());
+        lSystem->save(&f);
+    }
 }
 
 void MainWindow::onSaveAsClicked()
 {
     QString s = QFileDialog::getSaveFileName(this,tr("Save L-System File"), "", tr("L-System Files (*.lsys"));
 
-    QFile *f = new QFile(s);
+    // do not save if user pressed cancel
+    if (s.isNull()) { return; }
 
-    lSystem->save(f);
+    QFile f(s);
 
-    delete f;
+    lSystem->save(&f);
 }
 
 void MainWindow::onShowHideBrowserClicked()
@@ -134,21 +176,44 @@ void MainWindow::onRandomizeColorsClicked()
     update();
 }
 
+bool MainWindow::unchangedOrConfirmedLosingChanges()
+{
+    if (isWindowModified()) {
+        QMessageBox::StandardButton answer;
+        answer = QMessageBox::question(
+            this, "Question", "Current file was modified and not saved. Load new file?",
+            QMessageBox::Yes | QMessageBox::No
+        );
+        if (answer == QMessageBox::No) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
 void MainWindow::openFile(QFile *f)
 {
     lSystem->load(f);
-    ui->rulesEditorWidget->loadRules(lSystem);
-    ui->interpretationsEditorWidget->loadInterpretations(lSystem);
     ui->axiomLineEdit->setText(lSystem->getStart().c_str());
+    setWindowModified(false);
+    setWindowFilePath(f->fileName());
 }
 
 void MainWindow::onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
-    QString path = fileSystemModel->filePath(ui->treeView->selectionModel()->currentIndex());
+    if (unchangedOrConfirmedLosingChanges())
+    {
+        QString path = fileSystemModel->filePath(ui->treeView->selectionModel()->currentIndex());
 
-    QFile *f = new QFile(path);
+        QFile f(path);
+        QFileInfo fi(f);
 
-    openFile(f);
+        // skip opening when user clicked on directory
+        if (!fi.isDir()) {
+            openFile(&f);
+        }
+    }
 }
 
 void MainWindow::on_addRuleButton_clicked()
@@ -165,4 +230,9 @@ void MainWindow::on_addInterpretationButton_clicked()
 void MainWindow::onAxiomChanged()
 {
     lSystem->setStart(ui->axiomLineEdit->text().toStdString());
+}
+
+void MainWindow::onLSystemChanged()
+{
+    setWindowModified(true);
 }

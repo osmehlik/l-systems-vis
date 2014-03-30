@@ -16,6 +16,7 @@ void InterpretationsEditorWidget::addInterpretation(char c, CharInterpretationAc
 {
     InterpretationEditorWidget *interpretation = new InterpretationEditorWidget(this);
 
+    interpretation->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     interpretation->setAction(action);
     interpretation->setSymbol(c);
     interpretation->setParam(param);
@@ -28,7 +29,7 @@ void InterpretationsEditorWidget::addInterpretation(char c, CharInterpretationAc
     emit interpretationWasAdded();
 }
 
-void InterpretationsEditorWidget::loadInterpretations(LSystem *lSystem)
+void InterpretationsEditorWidget::load(LSystem *lSystem)
 {
     this->lsystem = lSystem;
     currentInterpretationIndex = 0;
@@ -40,7 +41,6 @@ void InterpretationsEditorWidget::loadInterpretations(LSystem *lSystem)
     blockSignals(true);
     for (int i(0); i < numInterpretations; ++i) {
         const CharInterpretation ci = lSystem->getInterpretation(i);
-        lsystem->addInterpretation();
         addInterpretation(ci.symbol,ci.action,ci.param);
     }
     blockSignals(false);

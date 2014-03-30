@@ -19,7 +19,9 @@ public:
     ~MainWindow();
 
 public slots:
+    void onNewClicked();
     void onOpenClicked();
+    void onSaveClicked();
     void onSaveAsClicked();
     void onShowHideBrowserClicked();
     void onShowHidePropertiesClicked();
@@ -28,13 +30,13 @@ public slots:
 
     void onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     void onAxiomChanged();
-
+    void onLSystemChanged();
 private slots:
     void on_addRuleButton_clicked();    
     void on_addInterpretationButton_clicked();
 
 private:
-
+    bool unchangedOrConfirmedLosingChanges();
     void openFile(QFile *f);
 
     Ui::MainWindow *ui;

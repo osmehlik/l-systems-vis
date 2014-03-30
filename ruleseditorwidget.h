@@ -13,7 +13,6 @@ public:
     void addRule(const QString &from = "", const QString &to = "");
     //void addAddButton();
     void removeContents();
-    void loadRules(LSystem *lsystem);
 
 protected:
     QVBoxLayout *vbox;
@@ -25,6 +24,7 @@ signals:
     void ruleWasRemoved(int i);
 
 public slots:
+    void load(LSystem *lsystem);
     void onAddClicked();
 };
 

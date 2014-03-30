@@ -30,6 +30,8 @@ typedef struct CharInterpretation_s
 typedef std::vector<CharInterpretation > CharInterpretations;
 
 // String rewriting rules.
+// First item in pair is rewrite from string.
+// Second item in pair is rewrite to string.
 typedef std::vector<std::pair<std::string, std::string> > Rules;
 
 class LSystem : public QObject
@@ -50,6 +52,11 @@ private:
 
     QColor backgroundColor;
     QColor foregroundColor;
+
+    // If a L-System
+    // a) represent a file on disk, contains path to that file
+    // b) does not represent a file on disk, contains an empty string
+    std::string path;
 
 protected:
     void writeStart(QXmlStreamWriter &writer);
@@ -72,12 +79,13 @@ public:
 
     void load(QFile *f);
     void save(QFile *f);
-    void setDefaultState();
+    void loadDefault();
     void setRandomColors();
     std::string evolve(int iterations);
 
     // getters
 
+    inline std::string getPath() { return path; }
     inline std::string getStart() { return start;      }
     inline double getStartX()     { return startX;     }
     inline double getStartY()     { return startY;     }
@@ -99,7 +107,8 @@ public:
     inline int getInterpretationParam(size_t i) { return interpretations.at(i).param; }
 
 signals:
-    void lSystemWasChanged();
+    void loaded(LSystem *lSystem); // emited after calling load() or loadDefault()
+    void changed();
     void startXWasChanged(double);
     void startYWasChanged(double);
     void startRotWasChanged(int);

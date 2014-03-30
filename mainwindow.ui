@@ -25,9 +25,6 @@
     <height>600</height>
    </size>
   </property>
-  <property name="windowTitle">
-   <string>L-Systems Vis</string>
-  </property>
   <widget class="LSystemView" name="centralWidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -55,7 +52,9 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -453,6 +452,16 @@
   <action name="actionShowHideRules">
    <property name="text">
     <string>Show/Hide Rules</string>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>New</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save</string>
    </property>
   </action>
  </widget>

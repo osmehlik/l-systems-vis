@@ -42,7 +42,7 @@ void RulesEditorWidget::addAddButton()
 }
 */
 
-void RulesEditorWidget::loadRules(LSystem *lsystem)
+void RulesEditorWidget::load(LSystem *lsystem)
 {
     removeContents();
 

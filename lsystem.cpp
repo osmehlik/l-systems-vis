@@ -4,28 +4,29 @@
 #include <sstream>
 #include <QMessageBox>
 
-
-//LSystem::LSystem() {}
 LSystem::LSystem(QObject *parent) : QObject(parent)
 {
-    setDefaultState();
+    loadDefault();
 }
 
 LSystem::~LSystem()
 {}
 
-void LSystem::setDefaultState()
+void LSystem::loadDefault()
 {
-    start = "";
     rules.clear();
     interpretations.clear();
-    startX = 0.5;
-    startY = 0.5;
-    startRot = 0;
-    iterations = 8;
-    backgroundColor = "#ffffff";
-    foregroundColor = "#000000";
-    stepLength = 10;
+
+    setStart("");
+    setStartX(0.5);
+    setStartY(0.5);
+    setStartRot(0);
+    setIterations(8);
+    setBackgroundColor(QColor("#ffffff"));
+    setForegroundColor(QColor("#000000"));
+    setStepLength(10);
+
+    emit loaded(this);
 }
 
 std::string LSystem::evolve(int iterations)
@@ -208,7 +209,7 @@ void LSystem::load(QFile *f)
 
     QXmlStreamReader xml(f);
 
-    setDefaultState();
+    loadDefault();
 
     while ((!xml.atEnd()) && (!xml.hasError())) {
         QXmlStreamReader::TokenType token = xml.readNext();
@@ -233,7 +234,10 @@ void LSystem::load(QFile *f)
 
     xml.clear();
 
-    emit lSystemWasChanged();
+    path = f->fileName().toStdString();
+
+    emit loaded(this);
+    emit changed();
     emit startXWasChanged(startX);
     emit startYWasChanged(startY);
     emit startRotWasChanged(startRot);
@@ -340,7 +344,7 @@ void LSystem::setStart(std::string start)
 {
     if (start != this->start) {
         this->start = start;
-        emit lSystemWasChanged();
+        emit changed();
     }
 }
 
@@ -349,7 +353,7 @@ void LSystem::setStartX(double startX)
     if (startX != this->startX) {
         this->startX = startX;
         emit startXWasChanged(this->startX);
-        emit lSystemWasChanged();
+        emit changed();
     }
 }
 
@@ -358,7 +362,7 @@ void LSystem::setStartY(double startY)
     if (startY != this->startY) {
         this->startY = startY;
         emit startYWasChanged(this->startY);
-        emit lSystemWasChanged();
+        emit changed();
     }
 }
 
@@ -367,7 +371,7 @@ void LSystem::setStartRot(int startRot)
     if (startRot != this->startRot) {
         this->startRot = startRot;
         emit startRotWasChanged(this->startRot);
-        emit lSystemWasChanged();
+        emit changed();
     }
 }
 
@@ -376,7 +380,7 @@ void LSystem::setIterations(int iterations)
     if (iterations != this->iterations) {
         this->iterations = iterations;
         emit iterationsWasChanged(this->iterations);
-        emit lSystemWasChanged();
+        emit changed();
     }
 }
 
@@ -385,14 +389,14 @@ void LSystem::setStepLength(int stepLength)
     if (stepLength != this->stepLength) {
         this->stepLength = stepLength;
         emit stepLengthWasChanged(this->stepLength);
-        emit lSystemWasChanged();
+        emit changed();
     }
 }
 
 void LSystem::addRule()
 {
     rules.push_back(std::make_pair("", ""));
-    emit lSystemWasChanged();
+    emit changed();
 }
 
 void LSystem::setRule(int i, std::string from, std::string to)
@@ -400,13 +404,13 @@ void LSystem::setRule(int i, std::string from, std::string to)
     if ((from != rules.at(i).first) || (to != rules.at(i).second)) {
         rules.at(i).first = from;
         rules.at(i).second = to;
-        emit lSystemWasChanged();
+        emit changed();
     }
 }
 
 void LSystem::removeRule(int i)
 {
-    rules.erase(rules.begin() + i); emit lSystemWasChanged();
+    rules.erase(rules.begin() + i); emit changed();
 }
 
 void LSystem::setBackgroundColor(QColor backgroundColor)
@@ -414,7 +418,7 @@ void LSystem::setBackgroundColor(QColor backgroundColor)
     if (backgroundColor.isValid() && (backgroundColor != this->backgroundColor)) {
         this->backgroundColor = backgroundColor;
         emit backgroundColorWasChanged(this->backgroundColor);
-        emit lSystemWasChanged();
+        emit changed();
     }
 }
 
@@ -423,7 +427,7 @@ void LSystem::setForegroundColor(QColor foregroundColor)
     if (foregroundColor.isValid() && (foregroundColor != this->foregroundColor)) {
         this->foregroundColor = foregroundColor;
         emit foregroundColorWasChanged(this->foregroundColor);
-        emit lSystemWasChanged();
+        emit changed();
     }
 }
 
@@ -438,7 +442,7 @@ void LSystem::setInterpretationLetter(size_t i, char s)
 {
     if (interpretations.at(i).symbol != s) {
         interpretations.at(i).symbol = s;
-        emit lSystemWasChanged();
+        emit changed();
     }
 }
 
@@ -447,7 +451,7 @@ void LSystem::setInterpretationAction(size_t i, CharInterpretationAction action)
 {
     if (interpretations.at(i).action != action) {
         interpretations.at(i).action = action;
-        emit lSystemWasChanged();
+        emit changed();
     }
 }
 
@@ -455,7 +459,7 @@ void LSystem::setInterpretationParam(size_t i, int param)
 {
     if (interpretations.at(i).param != param) {
         interpretations.at(i).param = param;
-        emit lSystemWasChanged();
+        emit changed();
     }
 }
 
@@ -465,14 +469,14 @@ void LSystem::setInterpretation(int i, CharInterpretation ci)
          || (interpretations.at(i).action != ci.action)
          || (interpretations.at(i).symbol != ci.symbol)) {
         interpretations.at(i) = ci;
-        emit lSystemWasChanged();
+        emit changed();
     }
 }
 
 void LSystem::removeInterpretation(int i)
 {
     interpretations.erase(interpretations.begin() + i);
-    emit lSystemWasChanged();
+    emit changed();
 }
 
 
