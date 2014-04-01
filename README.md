@@ -10,6 +10,11 @@ Usage
 - Open L-SystemsVis.pro in Qt Creator, click Build - Run.
 - Use directory browser to open files in folder with l-systems-vis-data (separate repo here).
 
+
+Screenshot
+----------
+![L-SystemsVis](https://raw.github.com/osmehlik/l-systems-vis/master/screenshot.png)
+
 License
 -------
 
