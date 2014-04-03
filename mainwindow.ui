@@ -61,9 +61,18 @@
     <property name="title">
      <string>View</string>
     </property>
+    <widget class="QMenu" name="menuBrowserMode">
+     <property name="title">
+      <string>Browser</string>
+     </property>
+     <addaction name="actionBrowserModeList"/>
+     <addaction name="actionBrowserModeTree"/>
+    </widget>
     <addaction name="actionShowHideBrowser"/>
     <addaction name="actionShowHideProperties"/>
     <addaction name="actionShowHideRules"/>
+    <addaction name="separator"/>
+    <addaction name="menuBrowserMode"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -95,7 +104,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="tabAxiom">
         <attribute name="title">
@@ -383,14 +392,14 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>160</width>
+     <width>176</width>
      <height>256</height>
     </size>
    </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_4">
+   <widget class="QWidget" name="directoryBrowserDockWidgetContents">
     <property name="sizePolicy">
      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
       <horstretch>0</horstretch>
@@ -408,19 +417,37 @@
       <enum>QLayout::SetMaximumSize</enum>
      </property>
      <item>
-      <widget class="QTreeView" name="treeView">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+      <widget class="QStackedWidget" name="directoryBrowserStackedWidget">
+       <property name="currentIndex">
+        <number>1</number>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>128</width>
-         <height>128</height>
-        </size>
-       </property>
+       <widget class="QWidget" name="pageTreeView">
+        <layout class="QVBoxLayout" name="verticalLayout_9">
+         <item>
+          <widget class="QTreeView" name="treeView">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>128</width>
+             <height>128</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="pageListView">
+        <layout class="QVBoxLayout" name="verticalLayout_8">
+         <item>
+          <widget class="QListView" name="listView"/>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </item>
     </layout>
@@ -429,11 +456,6 @@
   <action name="actionOpen">
    <property name="text">
     <string>Open</string>
-   </property>
-  </action>
-  <action name="actionShowHideBrowser">
-   <property name="text">
-    <string>Show/Hide Browser</string>
    </property>
   </action>
   <action name="actionShowHideProperties">
@@ -462,6 +484,21 @@
   <action name="actionSave">
    <property name="text">
     <string>Save</string>
+   </property>
+  </action>
+  <action name="actionBrowserModeList">
+   <property name="text">
+    <string>List</string>
+   </property>
+  </action>
+  <action name="actionBrowserModeTree">
+   <property name="text">
+    <string>Tree</string>
+   </property>
+  </action>
+  <action name="actionShowHideBrowser">
+   <property name="text">
+    <string>Show/Hide Browser</string>
    </property>
   </action>
  </widget>

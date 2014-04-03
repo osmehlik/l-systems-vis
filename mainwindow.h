@@ -28,9 +28,16 @@ public slots:
     void onShowHideRulesClicked();
     void onRandomizeColorsClicked();
 
+    void onListActivated(QModelIndex mi);
     void onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     void onAxiomChanged();
     void onLSystemChanged();
+
+
+    void onBrowserModeListTriggered();
+    void onBrowserModeTreeTriggered();
+
+
 private slots:
     void on_addRuleButton_clicked();    
     void on_addInterpretationButton_clicked();

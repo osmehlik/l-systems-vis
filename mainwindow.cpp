@@ -78,10 +78,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionOpen->setShortcuts(QKeySequence::Open);
     ui->actionSave->setShortcuts(QKeySequence::Save);
     ui->actionSaveAs->setShortcuts(QKeySequence::SaveAs);
+    ui->actionShowHideBrowser->setShortcut(QKeySequence("CTRL+B"));
+    ui->actionShowHideProperties->setShortcut(QKeySequence("CTRL+P"));
+    ui->actionShowHideRules->setShortcut(QKeySequence("CTRL+R"));
+    ui->actionBrowserModeList->setShortcut(QKeySequence("CTRL+1"));
+    ui->actionBrowserModeTree->setShortcut(QKeySequence("CTRL+2"));
+
 
     // l-system directory browser
 
-    fileSystemModel = new QFileSystemModel;
+    fileSystemModel = new QFileSystemModel(this);
     fileSystemModel->setRootPath(QDir::homePath());
 
     QStringList nameFilters;
@@ -90,12 +96,23 @@ MainWindow::MainWindow(QWidget *parent) :
 
     fileSystemModel->setNameFilters(nameFilters);
 
+
+
     ui->treeView->setModel(fileSystemModel);
     ui->treeView->hideColumn(3);
     ui->treeView->hideColumn(2);
     ui->treeView->hideColumn(1);
     ui->treeView->setHeaderHidden(true);
 
+    ui->listView->setModel(fileSystemModel);
+
+    connect(ui->actionBrowserModeList, SIGNAL(triggered()), this, SLOT(onBrowserModeListTriggered()));
+    connect(ui->actionBrowserModeTree, SIGNAL(triggered()), this, SLOT(onBrowserModeTreeTriggered()));
+
+    connect(ui->listView, SIGNAL(activated(QModelIndex)), this, SLOT(onListActivated(QModelIndex)));
+
+    connect(ui->listView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(onSelectionChanged(QItemSelection,QItemSelection)));
 
     connect(ui->treeView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
             this, SLOT(onSelectionChanged(const QItemSelection &, const QItemSelection &)));
@@ -203,6 +220,31 @@ void MainWindow::openFile(QFile *f)
     setWindowFilePath(f->fileName());
 }
 
+void MainWindow::onListActivated(QModelIndex mi)
+{
+    QFileInfo fileInfo = fileSystemModel->fileInfo(mi);
+
+    if (fileInfo.isDir()) {
+        if (fileInfo.fileName() == QLatin1String(".")) {
+            return;
+            //fileSystemModel->setFilter(QDir::AllEntries | QDir::AllDirs);
+        }
+        else if (fileInfo.fileName() == QLatin1String("..")) {
+// open parent dir
+             ui->listView->setRootIndex(ui->listView->rootIndex().parent());
+           // fileSystemModel->setFilter(QDir::AllEntries | QDir::NoDot | QDir::AllDirs);
+        }
+        else {
+            ui->listView->setRootIndex(mi);
+           // fileSystemModel->setFilter(QDir::AllEntries | QDir::AllDirs);
+        }
+    }
+    else {
+        QFile f(fileInfo.absoluteFilePath());
+        openFile(&f);
+    }
+}
+
 void MainWindow::onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     if (unchangedOrConfirmedLosingChanges())
@@ -238,4 +280,24 @@ void MainWindow::onAxiomChanged()
 void MainWindow::onLSystemChanged()
 {
     setWindowModified(true);
+}
+
+void MainWindow::onBrowserModeListTriggered()
+{
+    ui->directoryBrowserStackedWidget->setCurrentIndex(1);
+}
+
+void MainWindow::onBrowserModeTreeTriggered()
+{
+    ui->directoryBrowserStackedWidget->setCurrentIndex(0);
+
+    QModelIndex i = ui->listView->rootIndex();
+
+    // expand all parents
+    while (i.isValid()) {
+        ui->treeView->expand(i);
+        i = i.parent();
+    }
+
+    ui->treeView->scrollTo(ui->listView->rootIndex(), QAbstractItemView::PositionAtTop);
 }
