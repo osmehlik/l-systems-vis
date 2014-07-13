@@ -1,15 +1,15 @@
-#ifndef RULESEDITORWIDGET_H
-#define RULESEDITORWIDGET_H
+#ifndef RULE_EDITOR_LIST_WIDGET_H
+#define RULE_EDITOR_LIST_WIDGET_H
 
 #include <QWidget>
 #include <QVBoxLayout>
 #include "lsystem.h"
 
-class RulesEditorWidget : public QWidget
+class RuleEditorListWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit RulesEditorWidget(QWidget *parent = 0);
+    explicit RuleEditorListWidget(QWidget *parent = 0);
     void addRule(const QString &from = "", const QString &to = "");
     //void addAddButton();
     void removeContents();

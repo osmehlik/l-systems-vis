@@ -1,8 +1,8 @@
-#include "ruleseditorwidget.h"
+#include "ruleeditorlistwidget.h"
 #include "ruleeditorwidget.h"
 #include <QPushButton>
 
-RulesEditorWidget::RulesEditorWidget(QWidget *parent) :
+RuleEditorListWidget::RuleEditorListWidget(QWidget *parent) :
     QWidget(parent)
 {
     vbox = new QVBoxLayout(this);
@@ -11,7 +11,7 @@ RulesEditorWidget::RulesEditorWidget(QWidget *parent) :
     addRule();
 }
 
-void RulesEditorWidget::removeContents()
+void RuleEditorListWidget::removeContents()
 {
     QLayoutItem *child;
     while ((child = vbox->takeAt(0)) != 0) {
@@ -20,7 +20,7 @@ void RulesEditorWidget::removeContents()
     }
 }
 
-void RulesEditorWidget::addRule(const QString &from, const QString &to) {
+void RuleEditorListWidget::addRule(const QString &from, const QString &to) {
     RuleEditorWidget *rule = new RuleEditorWidget(this, from, to);
 
     connect(rule, SIGNAL(removed(int)), this, SIGNAL(ruleWasRemoved(int)));
@@ -42,7 +42,7 @@ void RulesEditorWidget::addAddButton()
 }
 */
 
-void RulesEditorWidget::load(LSystem *lsystem)
+void RuleEditorListWidget::load(LSystem *lsystem)
 {
     removeContents();
 
@@ -56,7 +56,7 @@ void RulesEditorWidget::load(LSystem *lsystem)
     //addAddButton();
 }
 
-void RulesEditorWidget::onAddClicked()
+void RuleEditorListWidget::onAddClicked()
 {
     addRule();
 }

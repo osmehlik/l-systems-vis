@@ -30,8 +30,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionShowHideRules, SIGNAL(triggered()), this, SLOT(onShowHideRulesClicked()));
 
     // After L-System is opened, update rules and interpretations editor widget contents.
-    connect(lSystem, SIGNAL(loaded(LSystem*)), ui->rulesEditorWidget, SLOT(load(LSystem*)));
-    connect(lSystem, SIGNAL(loaded(LSystem*)), ui->interpretationsEditorWidget, SLOT(load(LSystem*)));
+    connect(lSystem, SIGNAL(loaded(LSystem*)), ui->ruleEditorListWidget, SLOT(load(LSystem*)));
+    connect(lSystem, SIGNAL(loaded(LSystem*)), ui->interpretationEditorListWidget, SLOT(load(LSystem*)));
 
     // Update L-System on controls change
     connect(ui->startXDoubleSpinBox, SIGNAL(valueChanged(double)), lSystem, SLOT(setStartX(double)));
@@ -52,14 +52,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(lSystem, SIGNAL(foregroundColorWasChanged(QColor)), ui->foregroundWidget, SLOT(setValue(QColor)));
 
     // Connect rules editing signals to slots.
-    connect(ui->rulesEditorWidget, SIGNAL(ruleWasAdded()), lSystem, SLOT(addRule()));
-    connect(ui->rulesEditorWidget, SIGNAL(ruleWasRemoved(int)), lSystem, SLOT(removeRule(int)));
-    connect(ui->rulesEditorWidget, SIGNAL(ruleWasChanged(int,std::string,std::string)), lSystem, SLOT(setRule(int,std::string,std::string)));
+    connect(ui->ruleEditorListWidget, SIGNAL(ruleWasAdded()), lSystem, SLOT(addRule()));
+    connect(ui->ruleEditorListWidget, SIGNAL(ruleWasRemoved(int)), lSystem, SLOT(removeRule(int)));
+    connect(ui->ruleEditorListWidget, SIGNAL(ruleWasChanged(int,std::string,std::string)), lSystem, SLOT(setRule(int,std::string,std::string)));
 
     // Connect interpretation editing signals to slots
-    connect(ui->interpretationsEditorWidget, SIGNAL(interpretationWasAdded()), lSystem, SLOT(addInterpretation()));
-    connect(ui->interpretationsEditorWidget, SIGNAL(interpretationWasChanged(int,CharInterpretation)), lSystem, SLOT(setInterpretation(int,CharInterpretation)));
-    connect(ui->interpretationsEditorWidget, SIGNAL(interpretationWasRemoved(int)), lSystem, SLOT(removeInterpretation(int)));
+    connect(ui->interpretationEditorListWidget, SIGNAL(interpretationWasAdded()), lSystem, SLOT(addInterpretation()));
+    connect(ui->interpretationEditorListWidget, SIGNAL(interpretationWasChanged(int,CharInterpretation)), lSystem, SLOT(setInterpretation(int,CharInterpretation)));
+    connect(ui->interpretationEditorListWidget, SIGNAL(interpretationWasRemoved(int)), lSystem, SLOT(removeInterpretation(int)));
 
 
     // Redraw lSystemView on lSystem change.
@@ -263,13 +263,13 @@ void MainWindow::onSelectionChanged(const QItemSelection &selected, const QItemS
 
 void MainWindow::on_addRuleButton_clicked()
 {
-    ui->rulesEditorWidget->addRule();
+    ui->ruleEditorListWidget->addRule();
 }
 
 void MainWindow::on_addInterpretationButton_clicked()
 {
     lSystem->addInterpretation();
-    ui->interpretationsEditorWidget->addInterpretation('?', MOVE_FORWARD);
+    ui->interpretationEditorListWidget->addInterpretation('?', MOVE_FORWARD);
 }
 
 void MainWindow::onAxiomChanged()

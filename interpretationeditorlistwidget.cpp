@@ -1,7 +1,7 @@
-#include "interpretationseditorwidget.h"
+#include "interpretationeditorlistwidget.h"
 #include "interpretationeditorwidget.h"
 
-InterpretationsEditorWidget::InterpretationsEditorWidget(QWidget *parent) :
+InterpretationEditorListWidget::InterpretationEditorListWidget(QWidget *parent) :
     QWidget(parent)
 {
     vbox = new QVBoxLayout(this);
@@ -12,7 +12,7 @@ InterpretationsEditorWidget::InterpretationsEditorWidget(QWidget *parent) :
 }
 
 
-void InterpretationsEditorWidget::addInterpretation(char c, CharInterpretationAction action, int param)
+void InterpretationEditorListWidget::addInterpretation(char c, CharInterpretationAction action, int param)
 {
     InterpretationEditorWidget *interpretation = new InterpretationEditorWidget(this);
 
@@ -29,7 +29,7 @@ void InterpretationsEditorWidget::addInterpretation(char c, CharInterpretationAc
     emit interpretationWasAdded();
 }
 
-void InterpretationsEditorWidget::load(LSystem *lSystem)
+void InterpretationEditorListWidget::load(LSystem *lSystem)
 {
     this->lsystem = lSystem;
     currentInterpretationIndex = 0;
@@ -46,7 +46,7 @@ void InterpretationsEditorWidget::load(LSystem *lSystem)
     blockSignals(false);
 }
 
-void InterpretationsEditorWidget::removeContents()
+void InterpretationEditorListWidget::removeContents()
 {
     QLayoutItem *child;
     while ((child = vbox->takeAt(0)) != 0) {

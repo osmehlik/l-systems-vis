@@ -17,18 +17,18 @@ SOURCES += main.cpp\
     lsystemview.cpp \
     lsystem.cpp \
     colorwidget.cpp \
-    ruleseditorwidget.cpp \
     ruleeditorwidget.cpp \
     interpretationeditorwidget.cpp \
-    interpretationseditorwidget.cpp
+    interpretationeditorlistwidget.cpp \
+    ruleeditorlistwidget.cpp
 
 HEADERS  += mainwindow.h \
     lsystemview.h \
     lsystem.h \
     colorwidget.h \
-    ruleseditorwidget.h \
     ruleeditorwidget.h \
     interpretationeditorwidget.h \
-    interpretationseditorwidget.h
+    interpretationeditorlistwidget.h \
+    ruleeditorlistwidget.h
 
 FORMS    += mainwindow.ui

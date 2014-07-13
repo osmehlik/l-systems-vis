@@ -154,7 +154,7 @@
            <property name="widgetResizable">
             <bool>true</bool>
            </property>
-           <widget class="RulesEditorWidget" name="rulesEditorWidget">
+           <widget class="RuleEditorListWidget" name="ruleEditorListWidget">
             <property name="geometry">
              <rect>
               <x>0</x>
@@ -191,7 +191,7 @@
            <property name="widgetResizable">
             <bool>true</bool>
            </property>
-           <widget class="InterpretationsEditorWidget" name="interpretationsEditorWidget">
+           <widget class="InterpretationEditorListWidget" name="interpretationEditorListWidget">
             <property name="geometry">
              <rect>
               <x>0</x>
@@ -517,15 +517,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>RulesEditorWidget</class>
+   <class>RuleEditorListWidget</class>
    <extends>QWidget</extends>
-   <header>ruleseditorwidget.h</header>
+   <header>ruleeditorlistwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>InterpretationsEditorWidget</class>
+   <class>InterpretationEditorListWidget</class>
    <extends>QWidget</extends>
-   <header>interpretationseditorwidget.h</header>
+   <header>interpretationeditorlistwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -1,15 +1,15 @@
-#ifndef INTERPRETATIONSEDITORWIDGET_H
-#define INTERPRETATIONSEDITORWIDGET_H
+#ifndef INTERPRETATION_EDITOR_LIST_WIDGET_H
+#define INTERPRETATION_EDITOR_LIST_WIDGET_H
 
 #include <QWidget>
 #include <QVBoxLayout>
 #include "lsystem.h"
 
-class InterpretationsEditorWidget : public QWidget
+class InterpretationEditorListWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit InterpretationsEditorWidget(QWidget *parent = 0);
+    explicit InterpretationEditorListWidget(QWidget *parent = 0);
     void addInterpretation(char c, CharInterpretationAction action, int param = 0);
 
     void removeContents();
