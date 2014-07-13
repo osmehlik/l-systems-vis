@@ -15,11 +15,11 @@
 
 typedef enum
 {
-    MOVE_FORWARD,
-    DRAW_FORWARD,
-    ROTATE,
-    PUSH_MATRIX,
-    POP_MATRIX
+    MOVE_FORWARD, // move forward without drawing a line
+    DRAW_FORWARD, // move forward with drawing a line
+    ROTATE,       // turn left/right by angle
+    PUSH_MATRIX,  // save current position and rotation
+    POP_MATRIX    // restore last saved position and rotation
 } CharInterpretationAction;
 
 typedef struct CharInterpretation_s
