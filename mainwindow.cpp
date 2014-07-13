@@ -1,3 +1,11 @@
+//
+// File:      mainwindow.cpp
+// Purpose:   Represents a main window, holds basic callbacks
+//            called when clicking on a menu items.
+// Copyright: Oldrich Smehlik, <oldrich@smehlik.net>
+// License:   See LICENSE.md file
+//
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "lsystemview.h"

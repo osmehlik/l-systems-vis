@@ -1,3 +1,10 @@
+//
+// File:      colorwidget.cpp
+// Purpose:   A widget to view and edit color.
+// Copyright: Oldrich Smehlik, <oldrich@smehlik.net>
+// License:   See LICENSE.md file
+//
+
 #include "colorwidget.h"
 #include <QPainter>
 #include <QColorDialog>

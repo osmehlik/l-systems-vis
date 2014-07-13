@@ -1,3 +1,10 @@
+//
+// File:      ruleeditorlistwidget.cpp
+// Purpose:   A widget showing a list of rule editor widgets.
+// Copyright: Oldrich Smehlik, <oldrich@smehlik.net>
+// License:   See LICENSE.md file
+//
+
 #include "ruleeditorlistwidget.h"
 #include "ruleeditorwidget.h"
 #include <QPushButton>

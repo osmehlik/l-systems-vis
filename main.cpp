@@ -1,3 +1,10 @@
+//
+// File:      main.cpp
+// Purpose:   The entry point of a program.
+// Copyright: Oldrich Smehlik, <oldrich@smehlik.net>
+// License:   See LICENSE.md file
+//
+
 #include "mainwindow.h"
 #include <QApplication>
 

@@ -1,3 +1,10 @@
+//
+// File:      interpretationeditorwidget.h
+// Purpose:   A widget to view and edit an interpretation of a symbol in a L-System.
+// Copyright: Oldrich Smehlik, <oldrich@smehlik.net>
+// License:   See LICENSE.md file
+//
+
 #ifndef INTERPRETATIONEDITORWIDGET_H
 #define INTERPRETATIONEDITORWIDGET_H
 

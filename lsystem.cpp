@@ -1,3 +1,9 @@
+//
+// File:      lsystem.cpp
+// Purpose:   Describes a L-System and related data structures.
+// Copyright: Oldrich Smehlik, <oldrich@smehlik.net>
+// License:   See LICENSE.md file
+//
 
 #include "lsystem.h"
 #include <iostream>

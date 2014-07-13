@@ -1,3 +1,11 @@
+//
+// File:      mainwindow.h
+// Purpose:   Represents a main window, holds basic callbacks
+//            called when clicking on a menu items.
+// Copyright: Oldrich Smehlik, <oldrich@smehlik.net>
+// License:   See LICENSE.md file
+//
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 

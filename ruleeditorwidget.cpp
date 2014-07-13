@@ -1,3 +1,10 @@
+//
+// File:      ruleeditorwidget.cpp
+// Purpose:   A widget to view/edit one rule in a L-System.
+// Copyright: Oldrich Smehlik, <oldrich@smehlik.net>
+// License:   See LICENSE.md file
+//
+
 #include "ruleeditorwidget.h"
 #include <QHBoxLayout>
 #include <QLabel>

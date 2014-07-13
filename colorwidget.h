@@ -1,3 +1,10 @@
+//
+// File:      colorwidget.h
+// Purpose:   A widget to view and edit color.
+// Copyright: Oldrich Smehlik, <oldrich@smehlik.net>
+// License:   See LICENSE.md file
+//
+
 #ifndef COLORWIDGET_H
 #define COLORWIDGET_H
 

@@ -1,3 +1,10 @@
+//
+// File:      interpretationeditorwidget.cpp
+// Purpose:   A widget to view and edit an interpretation of a symbol in a L-System.
+// Copyright: Oldrich Smehlik, <oldrich@smehlik.net>
+// License:   See LICENSE.md file
+//
+
 #include "interpretationeditorwidget.h"
 #include "lsystem.h"
 #include <QPushButton>

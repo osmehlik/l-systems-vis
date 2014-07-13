@@ -1,3 +1,10 @@
+//
+// File:      ruleeditorwidget.h
+// Purpose:   A widget to view/edit one rule in a L-System.
+// Copyright: Oldrich Smehlik, <oldrich@smehlik.net>
+// License:   See LICENSE.md file
+//
+
 #ifndef RULEEDITORWIDGET_H
 #define RULEEDITORWIDGET_H
 

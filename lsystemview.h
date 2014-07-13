@@ -1,3 +1,9 @@
+//
+// File:      lsystemview.h
+// Purpose:   A widget to display L-System.
+// Copyright: Oldrich Smehlik, <oldrich@smehlik.net>
+// License:   See LICENSE.md file
+//
 
 #ifndef LSYSTEMVIEW_H
 #define LSYSTEMVIEW_H

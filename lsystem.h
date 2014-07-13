@@ -1,3 +1,9 @@
+//
+// File:      lsystem.h
+// Purpose:   Describes a L-System and related data structures.
+// Copyright: Oldrich Smehlik, <oldrich@smehlik.net>
+// License:   See LICENSE.md file
+//
 
 #ifndef LSYSTEM_H
 #define LSYSTEM_H

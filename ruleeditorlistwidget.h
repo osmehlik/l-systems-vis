@@ -1,3 +1,10 @@
+//
+// File:      ruleeditorlistwidget.h
+// Purpose:   A widget showing a list of rule editor widgets.
+// Copyright: Oldrich Smehlik, <oldrich@smehlik.net>
+// License:   See LICENSE.md file
+//
+
 #ifndef RULE_EDITOR_LIST_WIDGET_H
 #define RULE_EDITOR_LIST_WIDGET_H
 

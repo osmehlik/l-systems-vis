@@ -1,3 +1,10 @@
+//
+// File:      interpretationeditorlistwidget.h
+// Purpose:   A widget showing a list of interpretation editor widgets.
+// Copyright: Oldrich Smehlik, <oldrich@smehlik.net>
+// License:   See LICENSE.md file
+//
+
 #ifndef INTERPRETATION_EDITOR_LIST_WIDGET_H
 #define INTERPRETATION_EDITOR_LIST_WIDGET_H
 
