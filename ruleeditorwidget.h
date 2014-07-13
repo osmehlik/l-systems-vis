@@ -5,8 +5,8 @@
 // License:   See LICENSE.md file
 //
 
-#ifndef RULEEDITORWIDGET_H
-#define RULEEDITORWIDGET_H
+#ifndef RULE_EDITOR_WIDGET_H
+#define RULE_EDITOR_WIDGET_H
 
 #include <QWidget>
 #include <QVBoxLayout>

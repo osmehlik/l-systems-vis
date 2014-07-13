@@ -6,8 +6,8 @@
 // License:   See LICENSE.md file
 //
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAIN_WINDOW_H
+#define MAIN_WINDOW_H
 
 #include <QMainWindow>
 #include <QItemSelection>

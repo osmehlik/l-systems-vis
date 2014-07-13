@@ -5,8 +5,8 @@
 // License:   See LICENSE.md file
 //
 
-#ifndef LSYSTEMVIEW_H
-#define LSYSTEMVIEW_H
+#ifndef LSYSTEM_VIEW_H
+#define LSYSTEM_VIEW_H
 
 #include <QWidget>
 #include "lsystem.h"

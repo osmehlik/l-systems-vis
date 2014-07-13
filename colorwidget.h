@@ -5,8 +5,8 @@
 // License:   See LICENSE.md file
 //
 
-#ifndef COLORWIDGET_H
-#define COLORWIDGET_H
+#ifndef COLOR_WIDGET_H
+#define COLOR_WIDGET_H
 
 #include <QWidget>
 

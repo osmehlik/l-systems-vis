@@ -5,8 +5,8 @@
 // License:   See LICENSE.md file
 //
 
-#ifndef INTERPRETATIONEDITORWIDGET_H
-#define INTERPRETATIONEDITORWIDGET_H
+#ifndef INTERPRETATION_EDITOR_WIDGET_H
+#define INTERPRETATION_EDITOR_WIDGET_H
 
 #include <QWidget>
 #include <QLineEdit>
